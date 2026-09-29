@@ -1,0 +1,19 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+blockchain/artifacts/
+blockchain/cache/
+
+# Data + trained models (too large / regenerable -- share via drive link instead)
+data/raw/
+data/processed/
+
+# OS
+.DS_Store
+
+# Claude Code local session state
+.claude/
