@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BCFL-IDS Console</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23256abf'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div>
+      <div class="brand-name">BCFL-IDS</div>
+      <div class="brand-sub">Trust-aware federated intrusion detection for IoT</div>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-view="overview" aria-selected="true">Overview</button>
+    <button role="tab" data-view="lab" aria-selected="false">Attack lab</button>
+    <button role="tab" data-view="detect" aria-selected="false">Detection</button>
+    <button role="tab" data-view="explain" aria-selected="false">Explainability</button>
+    <button role="tab" data-view="chain" aria-selected="false">Blockchain audit</button>
+    <button role="tab" data-view="results" aria-selected="false">Evaluation</button>
+  </nav>
+  <div class="top-right">
+    <span id="chainPill" class="pill" title="Local blockchain connection">Chain: checking</span>
+    <button id="themeBtn" class="ghost" type="button" aria-label="Switch light or dark theme">Theme</button>
+  </div>
+</header>
+
+<div id="banner" class="banner" role="alert" hidden></div>
+
+<main>
+  <!-- OVERVIEW -->
+  <section id="view-overview" class="view">
+    <div class="hero-grid">
+      <div class="card hero">
+        <div class="eyebrow">Measured on held-out N-BaIoT traffic</div>
+        <div id="heroValue" class="hero-value">–</div>
+        <div id="heroLabel" class="hero-label">Loading results</div>
+        <p id="heroNote" class="muted"></p>
+      </div>
+      <div id="overviewTiles" class="tiles"></div>
+    </div>
+    <div class="card">
+      <h2>How one training round works</h2>
+      <ol class="pipeline">
+        <li><strong>Local training</strong><span>Each of the 9 IoT devices trains on its own traffic. Raw data never leaves the device.</span></li>
+        <li><strong>Trust gate</strong><span>The server compares every update with the median update: direction (cosine) and size (norm ratio).</span></li>
+        <li><strong>Robust aggregation</strong><span>Accepted updates are combined with a trimmed mean, which discards extreme values per weight.</span></li>
+        <li><strong>On-chain record</strong><span>Score, reputation, update hash and explanation hash go to the TrustLayer smart contract.</span></li>
+        <li><strong>Explanation</strong><span>Integrated Gradients shows which traffic features drove each alert.</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h2>What protects the model before training starts</h2>
+      <p class="prose">Devices agree on a shared feature scale by exchanging only counts, sums and sums of squares. Each device gets one vote per feature, so a client that lies about its statistics cannot move the scale outside the honest range.</p>
+    </div>
+  </section>
+
+  <!-- ATTACK LAB -->
+  <section id="view-lab" class="view" hidden>
+    <form id="labForm" class="filters">
+      <label>Attack<select id="labAttack"></select></label>
+      <label>Attackers<select id="labN"></select></label>
+      <label>Defence<select id="labDefence"></select></label>
+      <label>Rounds<select id="labRounds"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
+      <label>Seed<input id="labSeed" type="number" min="0" max="1000000" value="1"></label>
+      <label class="check"><input id="labCompare" type="checkbox" checked>Compare with no defence</label>
+      <button id="labRun" class="primary" type="submit">Run simulation</button>
+      <button id="labStop" class="ghost" type="button" hidden>Stop</button>
+    </form>
+    <p id="labDesc" class="attack-desc"></p>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Detector quality per round <span class="sub">macro F1 on honest devices</span></h2>
+        <div id="labLegend" class="legend"></div>
+        <div id="labChart" class="chart"></div>
+      </div>
+      <div class="card">
+        <h2>Result</h2>
+        <div id="labTiles" class="tiles compact"></div>
+        <p id="labStatus" class="muted" aria-live="polite">Pick an attack and run it. Each run deploys a new contract on the local chain.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Trust decisions <span class="sub" id="labClientsSub">latest round of the defended run</span></h2>
+      <div id="labClients" class="client-grid"></div>
+    </div>
+    <div class="card">
+      <h2>Reputation over time <span class="sub">defended run; below 50 is probation</span></h2>
+      <div id="repChart" class="chart"></div>
+      <div id="repLegend" class="legend"></div>
+    </div>
+  </section>
+
+  <!-- DETECTION -->
+  <section id="view-detect" class="view" hidden>
+    <form id="detForm" class="filters">
+      <label>Device<select id="detDevice"></select></label>
+      <label>Traffic<select id="detFamily"></select></label>
+      <label>Records<select id="detCount"><option>20</option><option selected>40</option><option>100</option></select></label>
+      <button class="primary" type="submit">Replay traffic</button>
+    </form>
+    <p class="attack-desc">Replays recorded N-BaIoT test traffic through the trained detector. No live malware is involved, and these records were never used in training.</p>
+    <div id="detTiles" class="tiles row"></div>
+    <div class="grid-2 wide-left">
+      <div class="card">
+        <h2>Replayed records <span class="sub">select one to explain it</span></h2>
+        <div class="table-wrap tall"><table id="detTable"><thead><tr><th>#</th><th>True traffic</th><th>Detected as</th><th class="num">Confidence</th><th>Outcome</th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div class="card">
+        <h2>Why this decision</h2>
+        <div id="detExplain"><p class="muted">Select a record to see the features behind the decision.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLAINABILITY -->
+  <section id="view-explain" class="view" hidden>
+    <div id="expTiles" class="tiles row"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Features that drive attack decisions <span class="sub">mean |attribution|</span></h2>
+        <div id="expTop" class="chart"></div>
+      </div>
+      <div class="card">
+        <h2>Deletion test <span class="sub">evidence removed when features are reset to normal</span></h2>
+        <div id="expLegend" class="legend"></div>
+        <div id="expDeletion" class="chart"></div>
+        <p class="muted small">If the highlighted features truly drive the decision, removing them should erase far more evidence than removing random ones.</p>
+      </div>
+    </div>
+    <div class="grid-3" id="expGroups"></div>
+    <div class="card">
+      <h2>Do the explanations survive an attack? <span class="sub">defended model compared with the attack-free model</span></h2>
+      <div class="table-wrap"><table id="expAttack"><thead><tr><th>Attack (3 of 9 clients)</th><th class="num">Macro F1</th><th class="num">Rank correlation</th><th class="num">Top-20 overlap</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- BLOCKCHAIN -->
+  <section id="view-chain" class="view" hidden>
+    <div class="filters">
+      <label>Run<select id="chainRun"></select></label>
+      <button id="chainVerify" class="primary" type="button">Verify records against chain</button>
+      <button id="chainTamper" class="danger" type="button">Tamper with a record</button>
+      <button id="chainRestore" class="ghost" type="button">Restore</button>
+    </div>
+    <div id="chainVerdict" class="verdict" aria-live="polite" hidden></div>
+    <div id="chainTiles" class="tiles row"></div>
+    <div class="card">
+      <h2>On-chain trust ledger <span class="sub" id="chainSub"></span></h2>
+      <div class="table-wrap tall"><table id="chainTable"><thead><tr><th class="num">Round</th><th>Client</th><th class="num">Score</th><th>Verdict</th><th class="num">Reputation</th><th>Update hash</th><th>Record hash</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>Why each client was trusted or rejected <span class="sub">off-chain record; its hash is on-chain</span></h2>
+      <div class="table-wrap tall"><table id="chainRecords"><thead><tr><th class="num">Round</th><th>Client</th><th class="num">Cosine</th><th class="num">Norm ratio</th><th>Reason</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- EVALUATION -->
+  <section id="view-results" class="view" hidden>
+    <div class="filters">
+      <label>Metric<select id="resMetric">
+        <option value="macro_f1">Macro F1 (11 classes)</option>
+        <option value="macro_f1_merged">Macro F1 (look-alike families merged)</option>
+        <option value="attack_recall">Attack recall</option>
+        <option value="benign_recall">Benign recall</option>
+        <option value="mcc">MCC (attack vs benign)</option>
+        <option value="target_family_evasion">Targeted family evasion</option>
+      </select></label>
+      <label class="check"><input id="resTable" type="checkbox">Show as table</label>
+    </div>
+    <div class="card">
+      <h2>Every attack against every defence <span class="sub" id="resSub"></span></h2>
+      <div id="resHeat" class="heat-wrap"></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Attack-family confusion <span class="sub">defended model, no attacker</span></h2>
+        <div id="resConfusion" class="heat-wrap"></div>
+      </div>
+      <div class="card">
+        <h2>Per-device false alarms <span class="sub">benign recall with 95% interval</span></h2>
+        <div class="table-wrap"><table id="resDevices"><thead><tr><th>Device</th><th class="num">Benign recall</th><th class="num">95% interval</th><th class="num">Benign rows</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>How easy is the dataset? <span class="sub">data audit</span></h2>
+        <div class="table-wrap"><table id="resAudit"><thead><tr><th>Baseline</th><th class="num">Attack vs benign accuracy</th><th class="num">Macro F1</th></tr></thead><tbody></tbody></table></div>
+        <p id="resAuditNote" class="muted small"></p>
+      </div>
+      <div class="card">
+        <h2>Limits of these results</h2>
+        <ul id="resLimits" class="prose-list"></ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="tooltip" class="tooltip" role="status" hidden></div>
+<script src="/static/charts.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

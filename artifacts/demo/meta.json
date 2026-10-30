@@ -1,0 +1,14 @@
+{
+ "description": "Federated detector, trained with the proposed defence and no attacker.",
+ "train_fraction": 0.3,
+ "rounds": 20,
+ "seed": 1,
+ "test_metrics": {
+  "accuracy": 0.7131649480303054,
+  "macro_f1": 0.6603354184868948,
+  "attack_recall": 0.9997564098032375,
+  "benign_recall": 0.9989477281721049,
+  "mcc": 0.9978838184157415
+ },
+ "test_records": 1412554
+}

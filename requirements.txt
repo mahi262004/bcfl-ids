@@ -1,0 +1,11 @@
+# Pinned so the demo machine (macOS arm64) and dev machine (Windows x64) match.
+torch==2.8.0
+numpy==2.3.3
+scikit-learn==1.7.2
+fastapi==0.118.0
+uvicorn==0.37.0
+pydantic==2.11.9
+pandas==2.3.3
+web3==7.13.0
+pytest==8.4.2
+httpx==0.28.1
