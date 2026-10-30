@@ -99,6 +99,11 @@ contract TrustLayer {
         return entries[index];
     }
 
+    /// @notice The whole ledger in one call, so an auditor can check every record at once.
+    function allEntries() external view returns (Entry[] memory) {
+        return entries;
+    }
+
     function clientCount() external view returns (uint256) {
         return clients.length;
     }

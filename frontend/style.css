@@ -196,7 +196,7 @@ tbody tr.selected { background: var(--raised); box-shadow: inset 3px 0 0 var(--a
 tr.highlight td { background: var(--bad-bg); }
 
 .heat-wrap { overflow-x: auto; }
-.heat-wrap svg { display: block; min-width: 620px; width: 100%; height: auto; }
+.heat-wrap svg { display: block; width: 100%; max-width: 900px; height: auto; }
 .heat-cell:hover, .heat-cell:focus { stroke: var(--text); stroke-width: 1.5; outline: none; }
 
 .verdict { border-radius: 8px; padding: 10px 14px; font-weight: 600; }

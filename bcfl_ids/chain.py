@@ -74,7 +74,10 @@ class ChainLedger:
         return self.contract.functions.onProbation(client_id).call()
 
     def _entry(self, index: int) -> dict:
-        e = self.contract.functions.entryAt(index).call()
+        return self._decode(self.contract.functions.entryAt(index).call())
+
+    @staticmethod
+    def _decode(e) -> dict:
         return {
             "round": e[0], "client": e[1], "score": e[2], "accepted": e[3], "rep_before": e[4], "rep_after": e[5],
             "update_hash": "0x" + e[6].hex().removeprefix("0x"), "record_hash": "0x" + e[7].hex().removeprefix("0x"),
@@ -82,7 +85,7 @@ class ChainLedger:
 
     @property
     def entries(self) -> list[dict]:
-        return [self._entry(i) for i in range(self.contract.functions.entryCount().call())]
+        return [self._decode(e) for e in self.contract.functions.allEntries().call()]
 
     @property
     def models(self) -> list[dict]:

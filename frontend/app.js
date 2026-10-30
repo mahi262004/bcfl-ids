@@ -132,7 +132,11 @@
     const worst = state.results.grid_summary.headline;
     tile(host, "No defence, worst attack", pct(worst.fedavg_worst.value, 1), `macro F1 under ${pretty(worst.fedavg_worst.attack)}, 3 of 9 clients`);
     tile(host, "Proposed, worst attack", pct(worst.proposed_worst.value, 1), `macro F1 under ${pretty(worst.proposed_worst.attack)}, 3 of 9 clients`);
-    tile(host, "Honest updates rejected", pct(state.results.grid_summary.cells.find((c) => c.attack === "sign_flip" && c.defence === "proposed").false_reject_rate.mean, 1), "false rejections with the gate active, under sign flip");
+    const attacked = state.results.grid_summary.cells.filter((c) => c.defence === "proposed" && c.attack !== "none" && c.false_reject_rate.mean !== null);
+    if (attacked.length) {
+      const worstFalse = Math.max(...attacked.map((c) => c.false_reject_rate.mean));
+      tile(host, "Honest updates rejected", pct(worstFalse, 1), "worst case across all attacks, 3 of 9 clients malicious");
+    }
   }
 
   /* ---------- attack lab ---------- */
@@ -379,7 +383,7 @@
     tile(tiles, "Stability across seeds", num(seeds.reduce((a, b) => a + b) / seeds.length, 2), "rank correlation of feature importance");
     tile(tiles, "Untrained model check", num(e.sanity_random_model_spearman, 2), "correlation with random weights; low is good");
     tile(tiles, "Integration error", pct(e.completeness.median_relative_error, 3), "implementation check, not faithfulness");
-    tile(tiles, "Explained records", String(e.explained_records), `against ${pretty(e.baseline_check.benign_mean_predicted_as)} baseline`);
+    tile(tiles, "Reference point", "Average benign traffic", `the average of all traffic reads as ${pretty(e.baseline_check.global_mean_predicted_as)}, so it would be a poor reference`, true);
     Charts.hbars($("expTop"), e.top_features.slice(0, 14).map((f) => ({ name: f.feature, value: f.mean_abs_attribution })), { color: Charts.css("--series-1"), fmt: (v) => v.toFixed(2), labelWidth: 150, tipName: "mean |attribution|" });
     const series = [
       { name: "Top-attributed features", color: Charts.css("--series-1"), points: e.deletion.map((d) => ({ x: d.k, y: d.evidence_removed_top })) },
@@ -387,7 +391,7 @@
     ];
     Charts.legend($("expLegend"), series.map((s) => ({ name: s.name, color: s.color })));
     const peak = Math.max(1, ...e.deletion.map((d) => d.evidence_removed_top));
-    Charts.line($("expDeletion"), { series, xMin: 1, xMax: 50, yMax: Math.ceil(peak * 5) / 5, yFmt: (v) => `${Math.round(v * 100)}%`, xLabel: "features deleted", height: 250 });
+    Charts.line($("expDeletion"), { series, xMin: 1, xMax: 50, yMax: Math.ceil(peak * 5) / 5, yTicks: Math.ceil(peak * 5), yFmt: (v) => `${Math.round(v * 100)}%`, xLabel: "features deleted", height: 250 });
     const groups = $("expGroups");
     groups.textContent = "";
     for (const [key, title] of [["statistic", "By statistic"], ["stream", "By traffic stream"], ["window", "By time window"]]) {
@@ -510,7 +514,8 @@
       return m && m.mean !== null ? m.mean : null;
     }));
     const colLabels = defences.map((d) => g.defence_labels[d]);
-    $("resSub").textContent = `${g.meta.seeds} seeds, 3 of 9 clients malicious, ${(g.meta.train_fraction * 100).toFixed(0)}% training sample, darker is ${lower ? "worse" : "better"}`;
+    const shortLabels = { fedavg: "No defence", median: "Median", trimmed: "Trim mean", multikrum: "Multi-Krum", gate: "Gate", gate_rep: "Gate + rep", gate_trim: "Gate + trim", proposed: "Proposed" };
+    $("resSub").textContent = `${g.meta.seeds} seeds, 3 of 9 clients malicious, ${(g.meta.train_fraction * 100).toFixed(0)}% training sample, ${lower ? "lower" : "higher"} is better`;
     const host = $("resHeat");
     if ($("resTable").checked) {
       host.textContent = "";
@@ -534,7 +539,7 @@
       host.appendChild(wrap);
     } else {
       Charts.heatmap(host, {
-        rows: attacks.map(pretty), cols: colLabels, cells, fmt: (v) => v.toFixed(2), labelWidth: 120, colHeight: 96, highlightCol: defences.indexOf("proposed"),
+        rows: attacks.map(pretty), cols: defences.map((d) => shortLabels[d]), cells, fmt: (v) => v.toFixed(2), labelWidth: 112, colHeight: 26, rotate: false, cellMinW: 84, highlightCol: defences.indexOf("proposed"),
         tip: (i, j, v) => {
           if (v === null || v === undefined) return "n/a";
           const c = cell(attacks[i], defences[j]);

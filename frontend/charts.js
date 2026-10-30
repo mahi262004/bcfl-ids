@@ -150,15 +150,17 @@ const Charts = (() => {
   }
 
   /* cells: matrix of numbers (null = not available). */
-  function heatmap(host, { rows, cols, cells, fmt, min = 0, max = 1, invert = false, showValues = true, labelWidth = 170, colHeight = 70, cellH = 30, cellMinW = 58, highlightCol = null, tip }) {
+  function heatmap(host, { rows, cols, cells, fmt, min = 0, max = 1, invert = false, showValues = true, labelWidth = 170, colHeight = 70, cellH = 30, cellMinW = 58, highlightCol = null, rotate = true, tip }) {
     host.textContent = "";
     const low = css("--seq-low"), high = css("--seq-high");
     const cellW = Math.max(cellMinW, Math.floor(560 / cols.length));
-    const W = labelWidth + cols.length * cellW + 4, H = colHeight + rows.length * cellH + 4;
+    const W = labelWidth + cols.length * cellW + (rotate ? 56 : 4), H = colHeight + rows.length * cellH + 4;
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "heatmap" }, host);
     cols.forEach((c, j) => {
       const x = labelWidth + j * cellW + cellW / 2;
-      const t = el("text", { transform: `translate(${x + 3},${colHeight - 6}) rotate(-35)`, "text-anchor": "start" }, svg);
+      const t = rotate
+        ? el("text", { transform: `translate(${x - 3},${colHeight - 6}) rotate(-35)`, "text-anchor": "start" }, svg)
+        : el("text", { x, y: colHeight - 9, "text-anchor": "middle" }, svg);
       t.textContent = c;
       if (j === highlightCol) t.setAttribute("style", `font-weight:700;fill:${css("--text")}`);
     });

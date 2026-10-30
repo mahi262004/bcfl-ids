@@ -86,6 +86,15 @@ describe("TrustLayer", function () {
     expect(e.recordHash).to.equal(H2);
   });
 
+  it("returns the whole ledger in one call", async function () {
+    await contract.submitScore(1, 1, 90, H1, H2);
+    await contract.submitScore(2, 1, 10, H1, H2);
+    const all = await contract.allEntries();
+    expect(all.length).to.equal(2);
+    expect(all[1].score).to.equal(10);
+    expect(all[1].repAfter).to.equal(62);
+  });
+
   it("emits ScoreRecorded", async function () {
     await expect(contract.submitScore(1, 1, 90, H1, H2)).to.emit(contract, "ScoreRecorded").withArgs(1, 1, 90, true, 72, H1, H2);
   });

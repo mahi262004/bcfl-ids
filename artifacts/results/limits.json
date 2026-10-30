@@ -1,0 +1,10 @@
+[
+  "Attack versus benign is easy on this dataset: a depth-3 decision tree already reaches about 99.8%. Robustness under attack is the meaningful result, not that number.",
+  "Two pairs of attack families (gafgyt tcp/udp, gafgyt junk/combo) are close to indistinguishable on later traffic with these features, even for a pooled random forest, which caps macro F1.",
+  "Results come from one dataset, captured in 2018. Nothing here shows the model works on other networks or newer malware. No physical device was tested.",
+  "All attackers are simulated and all traffic is replayed from the dataset. No real malware was used.",
+  "The grid trains on a 5% stratified sample of the training rows and tests on all held-out rows. The deployed model uses 30%. Three seeds per setting.",
+  "The chain is a single local Hardhat node, and the server is the only oracle. This makes verdicts tamper-evident after the fact; it does not decentralise the scoring.",
+  "Raw traffic stays on the device, but feature statistics and plain model updates reach the server. There is no secure aggregation or differential privacy.",
+  "Zero-knowledge verification is not implemented."
+]
