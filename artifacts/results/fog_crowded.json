@@ -1,0 +1,431 @@
+{
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "train_fraction": 0.05,
+ "rounds": 20,
+ "placements": {
+  "two on one node": [
+   1,
+   2,
+   4
+  ],
+  "three on one node": [
+   1,
+   2,
+   3
+  ]
+ },
+ "cells": [
+  {
+   "attack": "sign_flip",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.653289851430097,
+    0.6520892927439562,
+    0.629704569212871
+   ],
+   "macro_f1": 0.6450279044623081,
+   "macro_f1_merged": 0.849487786774413,
+   "attack_recall": 0.9999019818565339,
+   "benign_recall": 0.9988575680873698,
+   "worst_device_benign_recall": 0.9977825881794202,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "sign_flip",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6795138330117454,
+    0.6482405735744122,
+    0.6372788659798317
+   ],
+   "macro_f1": 0.6550110908553298,
+   "macro_f1_merged": 0.8480509865084116,
+   "attack_recall": 0.9998624229645522,
+   "benign_recall": 0.996950021224079,
+   "worst_device_benign_recall": 0.9848252344416027,
+   "false_reject_rate": 0.16666666666666666,
+   "attacker_reject_rate": 0.3333333333333333
+  },
+  {
+   "attack": "sign_flip",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6403001564807498,
+    0.6645331066080161,
+    0.6700389749583281
+   ],
+   "macro_f1": 0.658290746015698,
+   "macro_f1_merged": 0.8530538235192732,
+   "attack_recall": 0.9998791354891168,
+   "benign_recall": 0.9988770848241316,
+   "worst_device_benign_recall": 0.9977811913295783,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9833333333333334
+  },
+  {
+   "attack": "sign_flip",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6620688499707017,
+    0.6572499807744508,
+    0.6550737108585812
+   ],
+   "macro_f1": 0.6581308472012446,
+   "macro_f1_merged": 0.8614956688932697,
+   "attack_recall": 0.9999056574821005,
+   "benign_recall": 0.9911964918074898,
+   "worst_device_benign_recall": 0.9731289665091657,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "label_flip",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.5995677560808848,
+    0.6524535977447736,
+    0.630838238060273
+   ],
+   "macro_f1": 0.6276198639619771,
+   "macro_f1_merged": 0.8256150866478457,
+   "attack_recall": 0.9631970441595912,
+   "benign_recall": 0.9845509666126894,
+   "worst_device_benign_recall": 0.9450930004071938,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.011111111111111112
+  },
+  {
+   "attack": "label_flip",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6329673284837211,
+    0.6261661065571522,
+    0.6199555157021931
+   ],
+   "macro_f1": 0.6263629835810222,
+   "macro_f1_merged": 0.8254135162111572,
+   "attack_recall": 0.9935554169529192,
+   "benign_recall": 0.9949586261470174,
+   "worst_device_benign_recall": 0.9768542199488491,
+   "false_reject_rate": 0.15,
+   "attacker_reject_rate": 0.11666666666666665
+  },
+  {
+   "attack": "label_flip",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6426300789187874,
+    0.6344960204380556,
+    0.612658413410032
+   ],
+   "macro_f1": 0.6299281709222918,
+   "macro_f1_merged": 0.8293043866612054,
+   "attack_recall": 0.9705905197514966,
+   "benign_recall": 0.9390983651676116,
+   "worst_device_benign_recall": 0.9041704476619422,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.05555555555555556
+  },
+  {
+   "attack": "label_flip",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6494044507090435,
+    0.6396925547102122,
+    0.6425049869392537
+   ],
+   "macro_f1": 0.6438673307861698,
+   "macro_f1_merged": 0.8420054575238519,
+   "attack_recall": 0.9823799245184079,
+   "benign_recall": 0.9485770903286178,
+   "worst_device_benign_recall": 0.9048726867440418,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "targeted_evasion",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.653289851430097,
+    0.6520892927439562,
+    0.629704569212871
+   ],
+   "macro_f1": 0.6450279044623081,
+   "macro_f1_merged": 0.849487786774413,
+   "attack_recall": 0.9999019818565339,
+   "benign_recall": 0.9988575680873698,
+   "worst_device_benign_recall": 0.9977825881794202,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "targeted_evasion",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6263667196118509,
+    0.6412023946454231,
+    0.6114850199036144
+   ],
+   "macro_f1": 0.6263513780536294,
+   "macro_f1_merged": 0.8254761185929179,
+   "attack_recall": 0.9956652245252823,
+   "benign_recall": 0.9984802511254003,
+   "worst_device_benign_recall": 0.9965892418990349,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.3333333333333333
+  },
+  {
+   "attack": "targeted_evasion",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6403001564807498,
+    0.6645331066080161,
+    0.6700389749583281
+   ],
+   "macro_f1": 0.658290746015698,
+   "macro_f1_merged": 0.8530538235192732,
+   "attack_recall": 0.9998791354891168,
+   "benign_recall": 0.9988770848241316,
+   "worst_device_benign_recall": 0.9977811913295783,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9777777777777779
+  },
+  {
+   "attack": "targeted_evasion",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.623968487541287,
+    0.6609771163864975,
+    0.6339211989271671
+   ],
+   "macro_f1": 0.6396222676183172,
+   "macro_f1_merged": 0.8414170728191873,
+   "attack_recall": 0.9833816980819673,
+   "benign_recall": 0.9990935946129428,
+   "worst_device_benign_recall": 0.9978254956927312,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "lie",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6421610015841458,
+    0.6629903006033131,
+    0.6320298071834052
+   ],
+   "macro_f1": 0.6457270364569547,
+   "macro_f1_merged": 0.8424496140874979,
+   "attack_recall": 0.9998936305348933,
+   "benign_recall": 0.9972277684321956,
+   "worst_device_benign_recall": 0.9893435635123615,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "lie",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6421610015841458,
+    0.6629903006033131,
+    0.6320298071834052
+   ],
+   "macro_f1": 0.6457270364569547,
+   "macro_f1_merged": 0.8424496140874979,
+   "attack_recall": 0.9998936305348933,
+   "benign_recall": 0.9972277684321956,
+   "worst_device_benign_recall": 0.9893435635123615,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "lie",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6558333290667554,
+    0.6816705881357169,
+    0.6678756162700558
+   ],
+   "macro_f1": 0.6684598444908426,
+   "macro_f1_merged": 0.8608802759798783,
+   "attack_recall": 0.9999200551354345,
+   "benign_recall": 0.9981945285407607,
+   "worst_device_benign_recall": 0.9964964274754315,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "lie",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6558333290667554,
+    0.6816705881357169,
+    0.6678756162700558
+   ],
+   "macro_f1": 0.6684598444908426,
+   "macro_f1_merged": 0.8608802759798783,
+   "attack_recall": 0.9999200551354345,
+   "benign_recall": 0.9981945285407607,
+   "worst_device_benign_recall": 0.9964964274754315,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "fang_trim",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6467001716959602,
+    0.6465933599579382,
+    0.6425220866097211
+   ],
+   "macro_f1": 0.6452718727545399,
+   "macro_f1_merged": 0.8434783330131688,
+   "attack_recall": 0.9998175895536394,
+   "benign_recall": 0.9928781423428239,
+   "worst_device_benign_recall": 0.9819885996812383,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "fang_trim",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.662372444808993,
+    0.6341009917015022,
+    0.6314440385717932
+   ],
+   "macro_f1": 0.6426391583607628,
+   "macro_f1_merged": 0.8417144796709786,
+   "attack_recall": 0.9998378085428746,
+   "benign_recall": 0.993936726041683,
+   "worst_device_benign_recall": 0.9737851662404092,
+   "false_reject_rate": 0.16666666666666666,
+   "attacker_reject_rate": 0.3333333333333333
+  },
+  {
+   "attack": "fang_trim",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.65331248352819,
+    0.651201098530234,
+    0.6287078573362035
+   ],
+   "macro_f1": 0.6444071464648758,
+   "macro_f1_merged": 0.8366534651207024,
+   "attack_recall": 0.9998999741978897,
+   "benign_recall": 0.9912038311223648,
+   "worst_device_benign_recall": 0.9671210332367357,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.13333333333333333
+  },
+  {
+   "attack": "fang_trim",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.635839513781526,
+    0.6549550048774287,
+    0.6548607189628618
+   ],
+   "macro_f1": 0.6485517458739389,
+   "macro_f1_merged": 0.8433583070569086,
+   "attack_recall": 0.9998749677473621,
+   "benign_recall": 0.9946019339094696,
+   "worst_device_benign_recall": 0.9899927266501499,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "adaptive_gate",
+   "placement": "two on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.6423115920943041,
+    0.6413242558393717,
+    0.6238909108361637
+   ],
+   "macro_f1": 0.6358422529232798,
+   "macro_f1_merged": 0.829144304225187,
+   "attack_recall": 0.9963509119863003,
+   "benign_recall": 0.888398027470771,
+   "worst_device_benign_recall": 0.8125648456226969,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "adaptive_gate",
+   "placement": "two on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.6289094692583991,
+    0.6458471453881942,
+    0.628877284668042
+   ],
+   "macro_f1": 0.6345446331048784,
+   "macro_f1_merged": 0.8354395151541034,
+   "attack_recall": 0.9995903456963662,
+   "benign_recall": 0.9846819794467067,
+   "worst_device_benign_recall": 0.9580562659846548,
+   "false_reject_rate": 0.15833333333333333,
+   "attacker_reject_rate": 0.24444444444444446
+  },
+  {
+   "attack": "adaptive_gate",
+   "placement": "three on one node",
+   "defence": "proposed",
+   "macro_f1_by_seed": [
+    0.5966839153681204,
+    0.6379921950779915,
+    0.567619247147497
+   ],
+   "macro_f1": 0.6007651191978697,
+   "macro_f1_merged": 0.7940237013737859,
+   "attack_recall": 0.9500340807609842,
+   "benign_recall": 0.9733839746059706,
+   "worst_device_benign_recall": 0.9459683606577768,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "adaptive_gate",
+   "placement": "three on one node",
+   "defence": "fog",
+   "macro_f1_by_seed": [
+    0.5966839153681204,
+    0.6379921950779915,
+    0.567619247147497
+   ],
+   "macro_f1": 0.6007651191978697,
+   "macro_f1_merged": 0.7940237013737859,
+   "attack_recall": 0.9500340807609842,
+   "benign_recall": 0.9733839746059706,
+   "worst_device_benign_recall": 0.9459683606577768,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  }
+ ]
+}
