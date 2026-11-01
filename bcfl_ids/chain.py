@@ -10,7 +10,7 @@ ARTIFACT = BLOCKCHAIN_DIR / "artifacts" / "contracts" / "TrustLayer.sol" / "Trus
 DEFAULT_RPC = "http://127.0.0.1:8545"
 
 # The fields that are hashed into record_hash. Reputation is excluded: the chain computes it.
-RECORD_FIELDS = ("round", "client", "cosine", "norm_ratio", "score", "gate_passed", "on_probation", "included", "reason", "update_hash")
+RECORD_FIELDS = ("round", "client", "fog", "cosine", "norm_ratio", "score", "gate_passed", "on_probation", "included", "reason", "update_hash")
 
 
 def chain_available(rpc_url: str = DEFAULT_RPC) -> bool:

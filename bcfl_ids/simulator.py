@@ -172,6 +172,7 @@ def run_simulation(
             record = {
                 "round": round_no,
                 "client": c.device,
+                "fog": FOG_OF[c.device] if defence.fog else None,
                 "cosine": v.cosine,
                 "norm_ratio": v.norm_ratio,
                 "score": v.score,
@@ -182,6 +183,8 @@ def run_simulation(
                 "update_hash": weights_hash(updates[c.device]),
             }
             record_hash = canonical_hash(record)
+            if store is not None:
+                store.put(update_bytes(updates[c.device]))
             entry = ledger.submit(round_no, c.device, v.score, record["update_hash"], record_hash)
             record = {**record, "record_hash": record_hash, "rep_before": entry["rep_before"], "rep_after": entry["rep_after"], "malicious": c.device in attackers}
             round_records.append(record)
