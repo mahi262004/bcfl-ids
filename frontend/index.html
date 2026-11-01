@@ -163,6 +163,44 @@
     </div>
   </section>
 
+  <!-- FOG AND IPFS -->
+  <section id="view-fog" class="view" hidden>
+    <div class="filters">
+      <label>Run<select id="fogRun"></select></label>
+      <button id="fogRecheck" class="primary" type="button">Re-check decisions from stored files</button>
+      <button id="fogSwap" class="danger" type="button">Serve a swapped file</button>
+      <button id="fogRestore" class="ghost" type="button">Restore</button>
+    </div>
+    <div id="fogVerdict" class="verdict" aria-live="polite" hidden></div>
+    <div id="fogTiles" class="tiles row"></div>
+    <div class="card">
+      <h2>Fog nodes <span class="sub" id="fogSub"></span></h2>
+      <div class="filters fog-round"><label>Round<select id="fogRound"></select></label></div>
+      <div id="fogNodes" class="fog-grid"></div>
+      <p class="muted small">Fog nodes run as separate gate steps inside one process on this computer. They are not separate machines, and all of them are assumed honest.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Re-check by round <span class="sub">recomputed from the stored files</span></h2>
+        <div class="table-wrap tall"><table id="fogRecheckTable"><thead><tr><th class="num">Round</th><th class="num">Files found</th><th class="num">Decisions that differ</th><th>Global model</th></tr></thead><tbody><tr><td colspan="4" class="muted">Press Re-check to fill this in.</td></tr></tbody></table></div>
+      </div>
+      <div class="card">
+        <h2>Download the model <span class="sub">weights and scale only, never traffic data</span></h2>
+        <div id="fogModel"></div>
+        <div class="filters fog-actions">
+          <a id="fogDownload" class="button-link" href="#" download>Download model</a>
+          <label>Check a downloaded file<input id="fogCheckFile" type="file" accept=".npz"></label>
+        </div>
+        <div id="fogCheckResult" class="verdict" aria-live="polite" hidden></div>
+        <p class="muted small">A match shows the file holds the weights recorded on the chain. It does not show the model is safe or suits new hardware: it has only seen these nine devices, and this run trained on the small demo sample.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Stored update files <span class="sub" id="fogFilesSub"></span></h2>
+      <div class="table-wrap tall"><table id="fogFiles"><thead><tr><th class="num">Round</th><th>Client</th><th>Verdict on chain</th><th>Address</th><th>Stored in</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
   <!-- EVALUATION -->
   <section id="view-results" class="view" hidden>
     <div class="filters">
