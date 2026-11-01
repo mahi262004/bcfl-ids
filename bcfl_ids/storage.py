@@ -50,3 +50,27 @@ def digest_of(cid: str) -> bytes:
     if not cid.startswith("b") or raw[:4] != _CID_PREFIX or len(raw) != 36:
         raise StoreError(f"Not a supported address: {cid}")
     return raw[4:]
+
+
+class IpfsClient:
+    """The few calls of Kubo's HTTP API that the store needs."""
+
+    def __init__(self, api_url: str = DEFAULT_IPFS_API) -> None:
+        self.api_url = api_url.rstrip("/")
+
+    def _post(self, path: str, data: bytes = b"", headers: dict | None = None, timeout: float = 5.0) -> bytes:
+        request = urllib.request.Request(f"{self.api_url}/api/v0/{path}", data=data, headers=headers or {}, method="POST")
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return response.read()
+
+    def version(self, timeout: float = 1.0) -> str:
+        return json.loads(self._post("version", timeout=timeout))["Version"]
+
+    def add(self, data: bytes) -> str:
+        boundary = "bcfl-ids-update-file"
+        body = (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="update"\r\nContent-Type: application/octet-stream\r\n\r\n').encode() + data + f"\r\n--{boundary}--\r\n".encode()
+        reply = self._post("add?cid-version=1&raw-leaves=true&pin=false&quieter=true", body, {"Content-Type": f"multipart/form-data; boundary={boundary}"})
+        return json.loads(reply)["Hash"]
+
+    def cat(self, cid: str) -> bytes:
+        return self._post(f"cat?arg={cid}")
