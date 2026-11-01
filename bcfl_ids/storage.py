@@ -74,3 +74,72 @@ class IpfsClient:
 
     def cat(self, cid: str) -> bytes:
         return self._post(f"cat?arg={cid}")
+
+
+class UpdateStore:
+    """Puts files on IPFS, or in a local folder if the node is down. Every read checks the hash."""
+
+    def __init__(self, local_dir: Path, ipfs: IpfsClient | None = None) -> None:
+        self.local_dir = Path(local_dir)
+        self.ipfs = ipfs
+        self.ipfs_files = 0
+        self.local_files = 0
+        self.swapped: dict[str, bytes] = {}
+        self._skip_ipfs_until = 0.0
+
+    def _ipfs_usable(self) -> bool:
+        return self.ipfs is not None and time.time() >= self._skip_ipfs_until
+
+    def _ipfs_failed(self) -> None:
+        self._skip_ipfs_until = time.time() + _RETRY_AFTER
+
+    def put(self, data: bytes) -> dict:
+        cid = cid_for(data)
+        if self._ipfs_usable():
+            try:
+                if self.ipfs.add(data) != cid:
+                    raise StoreError("the IPFS node returned an unexpected address")
+                self.ipfs_files += 1
+                return {"cid": cid, "where": "ipfs", "size": len(data)}
+            except (OSError, ValueError, KeyError, StoreError):
+                self._ipfs_failed()
+        self.local_dir.mkdir(parents=True, exist_ok=True)
+        path = self.local_dir / cid
+        temporary = path.with_suffix(f".{os.getpid()}.tmp")
+        temporary.write_bytes(data)
+        temporary.replace(path)
+        self.local_files += 1
+        return {"cid": cid, "where": "local", "size": len(data)}
+
+    def _read(self, cid: str) -> tuple[bytes, str]:
+        if cid in self.swapped:
+            return self.swapped[cid], "swapped"
+        path = self.local_dir / cid
+        if path.exists():
+            return path.read_bytes(), "local"
+        if self._ipfs_usable():
+            try:
+                return self.ipfs.cat(cid), "ipfs"
+            except urllib.error.HTTPError as exc:
+                raise FileMissing(f"The IPFS node does not hold {cid}") from exc
+            except OSError:
+                self._ipfs_failed()
+        raise FileMissing(f"No stored file for {cid}")
+
+    def get(self, cid: str) -> bytes:
+        return self.read(cid)[0]
+
+    def read(self, cid: str) -> tuple[bytes, str]:
+        data, where = self._read(cid)
+        if hashlib.sha256(data).digest() != digest_of(cid):
+            raise FileMismatch(f"The file served for {cid} does not match its on-chain hash")
+        return data, where
+
+    def status(self) -> dict:
+        version = None
+        if self.ipfs is not None:
+            try:
+                version = self.ipfs.version()
+            except (OSError, ValueError, KeyError):
+                pass
+        return {"connected": version is not None, "version": version, "api_url": self.ipfs.api_url if self.ipfs else None, "ipfs_files": self.ipfs_files, "local_files": self.local_files}
