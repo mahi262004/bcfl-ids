@@ -38,6 +38,9 @@ Push-Location blockchain
 Run npm ci --no-audit --no-fund
 Pop-Location
 
+Write-Host "== IPFS node =="
+Run .venv\Scripts\python scripts\install_ipfs.py
+
 Write-Host "== Tests =="
 Run .venv\Scripts\python -m pytest -q
 Push-Location blockchain
