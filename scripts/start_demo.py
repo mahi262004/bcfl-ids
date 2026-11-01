@@ -75,6 +75,37 @@ def start_chain(procs: list) -> None:
         print("Chain: did not start in 45 s (see runtime/chain.log). Using the local ledger.")
 
 
+def start_ipfs(procs: list) -> None:
+    """Start a private IPFS node with no network access. Without one, files go to a local folder."""
+    if port_open(IPFS_API_PORT):
+        print(f"IPFS: already running on port {IPFS_API_PORT}")
+        return
+    if not IPFS_BINARY.exists():
+        print("IPFS: NOT installed, so update files go to a local folder. Run: python scripts/install_ipfs.py")
+        return
+    repo = LOGS / "ipfs-repo"
+    env = {**os.environ, "IPFS_PATH": str(repo)}
+
+    def ipfs(*args: str) -> None:
+        subprocess.run([str(IPFS_BINARY), *args], env=env, check=True, capture_output=True, timeout=60)
+
+    try:
+        if not (repo / "config").exists():
+            ipfs("init", "--profile=test")
+            ipfs("config", "Addresses.API", f"/ip4/127.0.0.1/tcp/{IPFS_API_PORT}")
+            ipfs("config", "Addresses.Gateway", f"/ip4/127.0.0.1/tcp/{IPFS_GATEWAY_PORT}")
+        ipfs("repo", "gc")  # Runs do not survive a restart, so their files need not either.
+        log = open(LOGS / "ipfs.log", "w")
+        procs.append(subprocess.Popen([str(IPFS_BINARY), "daemon", "--offline"], env=env, stdout=log, stderr=subprocess.STDOUT))
+    except (OSError, subprocess.SubprocessError) as exc:
+        print(f"IPFS: could not start ({exc}). Update files go to a local folder.")
+        return
+    if wait_for(lambda: port_open(IPFS_API_PORT), 30):
+        print(f"IPFS: private node on port {IPFS_API_PORT}, no network access")
+    else:
+        print("IPFS: did not start in 30 s (see runtime/ipfs.log). Update files go to a local folder.")
+
+
 def stop_all(procs: list) -> None:
     for p in procs:
         if p.poll() is None:
