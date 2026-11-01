@@ -344,6 +344,18 @@ def audit_restore() -> dict:
     return {"restored": True}
 
 
+@app.get("/api/model/{run_id}/file")
+def model_file(run_id: str) -> Response:
+    """A verified model package: weights, scale and labels. It never contains traffic data."""
+    run = _finished_run(run_id)
+    final = _final_model(run)
+    weights = np.frombuffer(final["data"], dtype=np.float32)
+    meta = {"run": run.id, "round": final["round"], "model_hash": final["model_hash"], "cid": final["cid"], "defence": run.config["defence"], "attack": run.config["attack"], "n_attackers": run.config["n_attackers"], "ledger": run.ledger.backend, "contract": getattr(run.ledger, "address", None), "architecture": [NUM_FEATURES, 128, 64, len(CLASSES)]}
+    buffer = io.BytesIO()
+    np.savez_compressed(buffer, weights=weights, mean=run.scale.mean, std=run.scale.std, features=np.array(bundle.features), classes=np.array(CLASSES), meta=np.array(json.dumps(meta)))
+    return Response(buffer.getvalue(), media_type="application/octet-stream", headers={"Content-Disposition": f'attachment; filename="bcfl-ids-model-{run.id}.npz"'})
+
+
 @app.get("/api/results")
 def get_results() -> dict:
     return results
