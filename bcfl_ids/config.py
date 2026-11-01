@@ -78,6 +78,10 @@ DEFENCES = {
     "fog": Defence("fog", agg="trimmed", gate=True, reputation=True, robust_scaler=True, fog=True),
 }
 
+# Fog node -> the devices it serves. Each node gates its own devices and forwards what passes.
+FOG_GROUPS = {"A": (1, 2, 3), "B": (4, 5, 6), "C": (7, 8, 9)}
+FOG_OF = {device: fog for fog, devices in FOG_GROUPS.items() for device in devices}
+
 DEFENCE_LABELS = {
     "fedavg": "No defence (FedAvg)",
     "median": "Coordinate median",
@@ -121,6 +125,7 @@ class SimConfig:
     cos_min: float = 0.1  # calibrated on validation data, see calibration.json
     ratio_max: float = 2.0  # update size / median update size; honest updates stay below 1.35 on validation data
     attacker_ids: list[int] = field(default_factory=list)  # chosen from the seed when empty
+    dishonest_server: bool = False  # demo: the server records attackers' failed updates as clean ones
 
     def to_dict(self) -> dict:
         return asdict(self)
