@@ -25,6 +25,24 @@ def table(header: list[str], rows: list[list[str]]) -> str:
 
 
 def main() -> None:
+    fog = json.loads((RESULTS_DIR / "fog_eval.json").read_text())
+    crowded = json.loads((RESULTS_DIR / "fog_crowded.json").read_text())
+
+    def rate(value) -> str:
+        return "n/a" if value is None else f"{value:.0%}"
+
+    def fog_pair(cells, *key) -> tuple[dict, dict]:
+        match = [c for c in cells if all(c[k] == v for k, v in key)]
+        return next(c for c in match if c["defence"] == "proposed"), next(c for c in match if c["defence"] == "fog")
+
+    fog_rows = []
+    for attack in dict.fromkeys(c["attack"] for c in fog["cells"]):
+        a, b = fog_pair(fog["cells"], ("attack", attack))
+        fog_rows.append([attack, f"{a['macro_f1']:.3f}", f"{b['macro_f1']:.3f}", f"{a['worst_device_benign_recall']:.3f}", f"{b['worst_device_benign_recall']:.3f}", rate(a["attacker_reject_rate"]), rate(b["attacker_reject_rate"])])
+    crowded_rows = []
+    for attack, placement in dict.fromkeys((c["attack"], c["placement"]) for c in crowded["cells"]):
+        a, b = fog_pair(crowded["cells"], ("attack", attack), ("placement", placement))
+        crowded_rows.append([attack, placement, f"{a['macro_f1']:.3f}", f"{b['macro_f1']:.3f}", rate(a["attacker_reject_rate"]), rate(b["attacker_reject_rate"]), rate(b["false_reject_rate"])])
     g, audit, ex, cal = load("grid_summary"), load("data_audit"), load("explain_eval"), load("calibration")
     meta = json.loads((ROOT / "artifacts" / "demo" / "meta.json").read_text())
     cells = {(c["attack"], c["defence"]): c for c in g["cells"]}
@@ -111,6 +129,24 @@ def main() -> None:
         f"- **Stability across seeds:** rank correlations " + ", ".join(f"{v:.2f}" for v in ex["stability_across_seeds_spearman"].values()) + "; top-20 overlap " + ", ".join(p(v, 0) for v in ex["stability_top20_overlap"].values()) + ".",
         "",
         table(["Attack on the defended model", "Macro F1", "Rank correlation with clean", "Top-20 overlap"], [[k, f"{v['macro_f1']:.3f}", f"{v['spearman_to_clean']:.2f}", p(v["top20_overlap_to_clean"], 0)] for k, v in ex["under_attack"].items()]),
+        "",
+        "## Fog nodes",
+        "",
+        "Three fog nodes each gate their own three devices (A: 1-3, B: 4-6, C: 7-9), then forward what passes to the central trimmed mean. Same settings as the grid, but compared only with central runs measured in the same batch, because results depend on the thread count.",
+        "",
+        "One attacker on each node, which is where all three seeds happened to place them:",
+        "",
+        table(["Attack", "Central macro F1", "Fog macro F1", "Central worst-device benign recall", "Fog worst-device benign recall", "Central attackers rejected", "Fog attackers rejected"], fog_rows),
+        "",
+        "Attackers placed by hand on one node:",
+        "",
+        table(["Attack", "Placement", "Central macro F1", "Fog macro F1", "Central attackers rejected", "Fog attackers rejected", "Fog honest updates rejected"], crowded_rows),
+        "",
+        "Macro F1 stays within noise everywhere. Fog looks better on false alarms under the adaptive and label-flip attacks when attackers are spread out, but those attacks were not written with fog nodes in mind. When attackers share a node, they control its median: the gate stops rejecting them and can reject an honest device instead, which also damages that device's on-chain reputation. The proposed central design therefore stays the default.",
+        "",
+        "## Re-checking decisions",
+        "",
+        "Every update and global model is stored by the hash recorded on the chain. The re-check fetches them, reruns the gate and aggregation, and compares the outcome with the chain. A demo server that records attackers' failed updates as clean passes the record check, because the chain faithfully stores what it was told, and fails the re-check. This was tested on the live chain and IPFS node, not measured as an experiment. The thresholds it uses still come from the server's configuration, and the server can decline to store a file, although a missing file is reported.",
         "",
         "## Limits",
         "",

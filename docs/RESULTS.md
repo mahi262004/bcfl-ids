@@ -221,6 +221,49 @@ Across 270 honest client-rounds, cosine to the median ranged from 0.292 to 0.894
 | fang_trim | 0.666 | 0.94 | 85% |
 | adaptive_gate | 0.637 | 0.90 | 75% |
 
+## Fog nodes
+
+Three fog nodes each gate their own three devices (A: 1-3, B: 4-6, C: 7-9), then forward what passes to the central trimmed mean. Same settings as the grid, but compared only with central runs measured in the same batch, because results depend on the thread count.
+
+One attacker on each node, which is where all three seeds happened to place them:
+
+| Attack | Central macro F1 | Fog macro F1 | Central worst-device benign recall | Fog worst-device benign recall | Central attackers rejected | Fog attackers rejected |
+|---|---|---|---|---|---|---|
+| none | 0.663 | 0.663 | 0.996 | 0.996 | n/a | n/a |
+| label_flip | 0.653 | 0.666 | 0.785 | 0.993 | 4% | 9% |
+| random_weights | 0.644 | 0.644 | 0.995 | 0.995 | 100% | 100% |
+| sign_flip | 0.644 | 0.644 | 0.995 | 0.995 | 100% | 99% |
+| scaling | 0.644 | 0.644 | 0.995 | 0.995 | 100% | 100% |
+| targeted_evasion | 0.640 | 0.644 | 0.997 | 0.995 | 93% | 99% |
+| lie | 0.670 | 0.670 | 0.988 | 0.988 | 0% | 0% |
+| minmax | 0.652 | 0.652 | 0.992 | 0.992 | 93% | 93% |
+| fang_trim | 0.652 | 0.645 | 0.968 | 0.997 | 10% | 41% |
+| adaptive_gate | 0.622 | 0.655 | 0.783 | 0.990 | 0% | 15% |
+| scaler_poison | 0.657 | 0.657 | 0.995 | 0.995 | 0% | 0% |
+
+Attackers placed by hand on one node:
+
+| Attack | Placement | Central macro F1 | Fog macro F1 | Central attackers rejected | Fog attackers rejected | Fog honest updates rejected |
+|---|---|---|---|---|---|---|
+| sign_flip | two on one node | 0.645 | 0.655 | 100% | 33% | 17% |
+| sign_flip | three on one node | 0.658 | 0.658 | 98% | 0% | 0% |
+| label_flip | two on one node | 0.628 | 0.626 | 1% | 12% | 15% |
+| label_flip | three on one node | 0.630 | 0.644 | 6% | 0% | 0% |
+| targeted_evasion | two on one node | 0.645 | 0.626 | 100% | 33% | 0% |
+| targeted_evasion | three on one node | 0.658 | 0.640 | 98% | 0% | 0% |
+| lie | two on one node | 0.646 | 0.646 | 0% | 0% | 0% |
+| lie | three on one node | 0.668 | 0.668 | 0% | 0% | 0% |
+| fang_trim | two on one node | 0.645 | 0.643 | 0% | 33% | 17% |
+| fang_trim | three on one node | 0.644 | 0.649 | 13% | 0% | 0% |
+| adaptive_gate | two on one node | 0.636 | 0.635 | 0% | 24% | 16% |
+| adaptive_gate | three on one node | 0.601 | 0.601 | 0% | 0% | 0% |
+
+Macro F1 stays within noise everywhere. Fog looks better on false alarms under the adaptive and label-flip attacks when attackers are spread out, but those attacks were not written with fog nodes in mind. When attackers share a node, they control its median: the gate stops rejecting them and can reject an honest device instead, which also damages that device's on-chain reputation. The proposed central design therefore stays the default.
+
+## Re-checking decisions
+
+Every update and global model is stored by the hash recorded on the chain. The re-check fetches them, reruns the gate and aggregation, and compares the outcome with the chain. A demo server that records attackers' failed updates as clean passes the record check, because the chain faithfully stores what it was told, and fails the re-check. This was tested on the live chain and IPFS node, not measured as an experiment. The thresholds it uses still come from the server's configuration, and the server can decline to store a file, although a missing file is reported.
+
 ## Limits
 
 - Attack versus benign is easy on this dataset: a depth-3 decision tree already reaches about 99.8%. Robustness under attack is the meaningful result, not that number.
@@ -235,6 +278,9 @@ Across 270 honest client-rounds, cosine to the median ranged from 0.292 to 0.894
 - The chain is a single local Hardhat node, and the server is the only oracle. This makes verdicts tamper-evident after the fact; it does not decentralise the scoring.
 - Raw traffic stays on the device, but feature statistics and plain model updates reach the server. There is no secure aggregation or differential privacy.
 - Zero-knowledge verification is not implemented.
+- Runs repeat exactly only with the same thread count on the same kind of machine. The same seed gave macro F1 from 0.651 to 0.679 across 1, 2, 4 and 12 threads, so gaps of about 0.03 or less between defences should not be read as real. The grid used 2 threads.
+- Fog nodes are separate gate steps in one process, assumed honest, and no attack here targets them. With two or three attackers on one node, its gate stops catching them and can reject an honest device, so the trimmed mean does the protecting.
+- The re-check needs the stored updates, and whoever reads them may learn something about a device's data. It runs on a single offline IPFS node, which adds no availability over a local folder.
 
 ## Differences from the Dissertation-I report
 

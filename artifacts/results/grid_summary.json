@@ -38,7 +38,8 @@
   "gate": "Trust gate only",
   "gate_rep": "Trust gate + reputation",
   "gate_trim": "Trust gate + trimmed mean",
-  "proposed": "Proposed (full stack)"
+  "proposed": "Proposed (full stack)",
+  "fog": "Fog nodes + full stack"
  },
  "cells": [
   {
@@ -10805,6 +10806,9 @@
   "The grid trains on a 5% stratified sample of the training rows and tests on all held-out rows. The deployed model uses 30%. Three seeds per setting.",
   "The chain is a single local Hardhat node, and the server is the only oracle. This makes verdicts tamper-evident after the fact; it does not decentralise the scoring.",
   "Raw traffic stays on the device, but feature statistics and plain model updates reach the server. There is no secure aggregation or differential privacy.",
-  "Zero-knowledge verification is not implemented."
+  "Zero-knowledge verification is not implemented.",
+  "Runs repeat exactly only with the same thread count on the same kind of machine. The same seed gave macro F1 from 0.651 to 0.679 across 1, 2, 4 and 12 threads, so gaps of about 0.03 or less between defences should not be read as real. The grid used 2 threads.",
+  "Fog nodes are separate gate steps in one process, assumed honest, and no attack here targets them. With two or three attackers on one node, its gate stops catching them and can reject an honest device, so the trimmed mean does the protecting.",
+  "The re-check needs the stored updates, and whoever reads them may learn something about a device's data. It runs on a single offline IPFS node, which adds no availability over a local folder."
  ]
 }

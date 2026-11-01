@@ -5,7 +5,7 @@ Minor Project, Group 275, Amity University Uttar Pradesh.
 
 **Team:** Mahi Nagar, Aanika Bajaj, Anshul Sharma. **Guide:** Dr. Rashmi.
 
-Nine IoT devices train one botnet detector without sharing raw traffic. The server scores every model update and rejects suspicious ones, a trimmed mean absorbs what gets through, every decision is recorded on a local blockchain, and each alert can be explained in terms of traffic features.
+Nine IoT devices train one botnet detector without sharing raw traffic. The server scores every model update and rejects suspicious ones, a trimmed mean absorbs what gets through, every decision is recorded on a local blockchain, and each alert can be explained in terms of traffic features. Updates are stored on a private IPFS node, so anyone holding them can recompute the server's decisions and check them against the chain.
 
 All attacks are simulated, and all traffic is replayed from the N-BaIoT dataset. No real malware is used.
 
@@ -32,7 +32,7 @@ or, while signed in to GitHub, [download the ZIP](https://github.com/mahi262004/
 
 ### 3. Run setup once
 
-This needs internet. It installs everything into the project folder, then runs the test suites to confirm the install works.
+This needs internet. It installs everything into the project folder, including a private IPFS node checked against a pinned hash, then runs the test suites to confirm the install works.
 
 | macOS or Linux | Windows |
 |---|---|
@@ -63,6 +63,7 @@ To present it, follow [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md). It has the walkt
 | "Node.js 18 or newer is required" | Install the Node.js LTS, open a new terminal and run setup again. |
 | "Run setup first" | Setup has not finished on this device. Run it again. |
 | The dashboard says it is using the local ledger | The demo still works, but without the blockchain. Stop it, start it again, and check `runtime/chain.log`. |
+| The dashboard says IPFS is using a local folder | The demo still works, with the same addresses. Run `python scripts/install_ipfs.py` with the project's Python, or check `runtime/ipfs.log`. |
 | Port 8000 is busy | Nothing to do: the terminal prints the address it used instead. |
 
 ## How it works
@@ -72,7 +73,11 @@ To present it, follow [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md). It has the walkt
 3. **Trust gate:** each update is checked for direction and size against the typical update, and each device carries a reputation score.
 4. **Aggregation:** the updates that pass are combined with a trimmed mean.
 5. **Audit:** every verdict is written to a smart contract, so later tampering with the off-chain records can be detected.
-6. **Explanation:** Integrated Gradients shows which traffic features drove each alert.
+6. **Update store:** every update and global model is stored by the hash on the chain, on a private IPFS node. A re-check recomputes the decisions from those files, which also catches a server that lied when it wrote to the chain.
+7. **Explanation:** Integrated Gradients shows which traffic features drove each alert.
+8. **Download:** the final model can be downloaded with its scale and checked against its on-chain hash. The package holds no traffic data.
+
+Fog nodes are an optional defence, **Fog nodes + full stack**. Three nodes each gate their own three devices before the central trimmed mean.
 
 ## Results
 
@@ -107,6 +112,8 @@ The full tables, method and limits are in [docs/RESULTS.md](docs/RESULTS.md).
 - The results come from one dataset, captured in 2018. No physical device was tested.
 - The chain is a single local node, and the server is the only oracle. Records are tamper-evident, but the scoring is not decentralised.
 - Model updates reach the server unencrypted. There is no secure aggregation or differential privacy.
+- Runs repeat exactly only with the same thread count on the same kind of machine, so gaps of about 0.03 between defences are noise.
+- Fog nodes run in one process and are assumed honest. When attackers share a node, its gate stops catching them and can reject an honest device.
 - Zero-knowledge verification is not implemented.
 
 ## What is in the repository
@@ -122,7 +129,7 @@ The full tables, method and limits are in [docs/RESULTS.md](docs/RESULTS.md).
 | `experiments/` | Scripts that produce every number in `artifacts/results` |
 | `artifacts/` | Trained demo model, small data sample and measured results |
 | `tests/` | Python test suite |
-| `scripts/` | Demo launcher and end-to-end preflight check |
+| `scripts/` | Demo launcher, IPFS installer and end-to-end preflight check |
 
 ## Reproduce the results
 
@@ -137,6 +144,8 @@ python -m experiments.run_grid          # every attack against every defence, re
 python -m experiments.summarise_grid
 python -m experiments.explain_eval
 python -m experiments.build_demo        # deployed model and demo sample
+python -m experiments.fog_eval          # fog nodes against the central gate
+python -m experiments.fog_crowded       # fog nodes with attackers on one node
 python -m experiments.write_results     # docs/RESULTS.md
 ```
 
@@ -144,7 +153,7 @@ Tests: `python -m pytest` and, in `blockchain/`, `npx hardhat test`.
 
 ## Networked run with Flower
 
-The experiments use an in-process simulator because it is fast and exactly repeatable. The same trust logic also runs as a real server and nine client processes over gRPC:
+The experiments use an in-process simulator because it is fast and repeatable for a given thread count. The same trust logic also runs as a real server and nine client processes over gRPC:
 
 ```bash
 python -m venv .venv-flower
