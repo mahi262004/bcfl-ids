@@ -654,6 +654,19 @@
     resetRecheck();
     await loadFog();
   }));
+  $("fogCheckFile").addEventListener("change", guard(async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const res = await api(`/api/model/${state.fogRunId}/check`, { method: "POST", headers: { "Content-Type": "application/octet-stream" }, body: await file.arrayBuffer() });
+      if (res.matches) fogVerdict("ok", "This file holds the weights recorded on the chain.", `SHA-256 ${short(res.computed)}`, "fogCheckResult");
+      else fogVerdict("bad", "This file does not match the chain.", `File ${short(res.computed)}, chain ${short(res.on_chain)}`, "fogCheckResult");
+    } catch (err) {
+      fogVerdict("bad", "Could not check this file.", err.message, "fogCheckResult");
+    }
+    e.target.value = "";
+  }));
+
   /* ---------- evaluation ---------- */
   function renderResults() {
     const g = state.results?.grid_summary;
