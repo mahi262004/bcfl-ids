@@ -104,6 +104,7 @@ def run_simulation(
     clients: list[ClientData],
     cfg: SimConfig,
     ledger=None,
+    store=None,
     on_round: Callable[[dict], None] | None = None,
     should_stop: Callable[[], bool] | None = None,
     eval_every: int = 1,
