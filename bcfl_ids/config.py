@@ -63,6 +63,7 @@ class Defence:
     gate: bool = False  # reject updates that fail the cosine / norm-ratio checks
     reputation: bool = False  # keep clients on probation out of the aggregate
     robust_scaler: bool = False  # robust aggregation of the shared feature statistics
+    fog: bool = False  # run the gate separately on each fog node's devices, not on all devices at once
 
 
 DEFENCES = {
@@ -74,6 +75,7 @@ DEFENCES = {
     "gate_rep": Defence("gate_rep", gate=True, reputation=True),
     "gate_trim": Defence("gate_trim", agg="trimmed", gate=True),
     "proposed": Defence("proposed", agg="trimmed", gate=True, reputation=True, robust_scaler=True),
+    "fog": Defence("fog", agg="trimmed", gate=True, reputation=True, robust_scaler=True, fog=True),
 }
 
 DEFENCE_LABELS = {
