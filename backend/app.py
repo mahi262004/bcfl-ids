@@ -356,6 +356,24 @@ def model_file(run_id: str) -> Response:
     return Response(buffer.getvalue(), media_type="application/octet-stream", headers={"Content-Disposition": f'attachment; filename="bcfl-ids-model-{run.id}.npz"'})
 
 
+@app.post("/api/model/{run_id}/check")
+async def model_check(run_id: str, request: Request) -> dict:
+    """Does an uploaded model package hold exactly the weights recorded on the chain?"""
+    run = _finished_run(run_id)
+    body = await request.body()
+    if not body or len(body) > 5_000_000:
+        raise HTTPException(422, "Upload a model package of at most 5 MB")
+    try:
+        with np.load(io.BytesIO(body), allow_pickle=False) as package:
+            weights = package["weights"].astype(np.float32).tobytes()
+    except Exception as exc:
+        raise HTTPException(422, "That is not a model package from this dashboard") from exc
+    models = _read_ledger(lambda: run.ledger.models)
+    computed = sha256_hex(weights)
+    expected = models[-1]["model_hash"] if models else None
+    return {"matches": computed == expected, "computed": computed, "on_chain": expected, "cid": cid_for(weights)}
+
+
 @app.get("/api/results")
 def get_results() -> dict:
     return results
