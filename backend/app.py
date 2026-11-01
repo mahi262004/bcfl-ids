@@ -325,6 +325,25 @@ def audit_recheck(run_id: str) -> dict:
     return {**recheck_run(run.config, entries, models, run.sizes, manager.store), "chain_records_check": manager.audit_run(run)["valid"]}
 
 
+@app.post("/api/audit/{run_id}/swap")
+def audit_swap(run_id: str) -> dict:
+    """Serve a different file for one update, as a dishonest operator might."""
+    run = _finished_run(run_id)
+    entries = _read_ledger(lambda: run.ledger.entries)
+    entry = entries[len(entries) // 2]
+    cid = cid_from_hash(entry["update_hash"])
+    data = bytearray(manager.store.get(cid))
+    data[:4] = b"\x00\x00\x80\x3f"
+    manager.store.swapped[cid] = bytes(data)
+    return {"round": entry["round"], "client": entry["client"]}
+
+
+@app.post("/api/audit/restore")
+def audit_restore() -> dict:
+    manager.store.swapped.clear()
+    return {"restored": True}
+
+
 @app.get("/api/results")
 def get_results() -> dict:
     return results
