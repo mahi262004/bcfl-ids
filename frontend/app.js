@@ -643,6 +643,17 @@
     });
     await loadFog();
   }));
+  $("fogSwap").addEventListener("click", guard(async () => {
+    const res = await api(`/api/audit/${state.fogRunId}/swap`, { method: "POST" });
+    fogVerdict("info", `Now serving a different file for round ${res.round}, client ${res.client}.`, "A dishonest operator might do this. Now press Re-check.");
+    await loadFog();
+  }));
+  $("fogRestore").addEventListener("click", guard(async () => {
+    await api("/api/audit/restore", { method: "POST" });
+    fogVerdict("info", "Original files restored.", "Press Re-check to confirm.");
+    resetRecheck();
+    await loadFog();
+  }));
   /* ---------- evaluation ---------- */
   function renderResults() {
     const g = state.results?.grid_summary;
