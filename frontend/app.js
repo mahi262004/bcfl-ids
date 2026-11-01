@@ -74,6 +74,7 @@
     document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === name)));
     document.querySelectorAll(".view").forEach((v) => { v.hidden = v.id !== `view-${name}`; });
     if (name === "chain") refreshRunList();
+    if (name === "fog") refreshFog();
     if (name === "results") renderResults();
     if (name === "explain") renderExplain();
     if (name === "overview") renderOverview();
@@ -100,6 +101,9 @@
       const pill = $("chainPill");
       pill.textContent = s.chain.connected ? "Chain: connected" : "Chain: offline, using local ledger";
       pill.className = `pill ${s.chain.connected ? "ok" : "off"}`;
+      const ipfs = $("ipfsPill");
+      ipfs.textContent = s.storage.connected ? "IPFS: private node" : "IPFS: offline, using local folder";
+      ipfs.className = `pill ${s.storage.connected ? "ok" : "off"}`;
       if (!$("banner").textContent.startsWith("A simulation") && $("banner").textContent.includes("not responding")) banner("");
     } catch (err) {
       $("chainPill").textContent = "Server: offline";
@@ -145,7 +149,8 @@
     const none = attack === "none";
     $("labN").disabled = none;
     $("labDesc").textContent = state.options.attacks.find((a) => a.id === attack)?.description || "";
-    $("labDefence").disabled = $("labCompare").checked;
+    $("labLie").disabled = none;
+    if (none) $("labLie").checked = false;
   }
   function labColors(run, index) {
     return run.config.defence === "fedavg" ? Charts.css("--series-2") : index === 0 && state.labRuns.length === 1 && run.config.defence !== "proposed" ? Charts.css("--series-3") : Charts.css("--series-1");
@@ -257,7 +262,8 @@
           const attackers = finished[0].summary.attackers;
           const note = attackers.length ? `Attackers: clients ${attackers.join(", ")}.` : "No attackers.";
           const where = finished[0].backend === "chain" ? "Trust records are on the local chain; open Blockchain audit to verify them." : "The chain was offline, so records went to the local in-memory ledger.";
-          $("labStatus").textContent = `Finished. ${note} ${where} Uses the small bundled demo sample, so values differ from the Evaluation tab.`;
+          const lied = finished.some((v) => v.config.dishonest_server) ? " The server lied on the chain in this run: Blockchain audit will still pass, and Fog and IPFS will catch it." : "";
+          $("labStatus").textContent = `Finished. ${note} ${where}${lied} Uses the small bundled demo sample, so values differ from the Evaluation tab.`;
         } else if (!failed) {
           $("labStatus").textContent = "Stopped.";
         }
@@ -285,6 +291,7 @@
       rounds: Number($("labRounds").value),
       seed: Number($("labSeed").value),
       compare: $("labCompare").checked,
+      dishonest_server: $("labLie").checked,
     };
     $("labRun").disabled = true;
     try {
