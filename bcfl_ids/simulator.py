@@ -157,10 +157,10 @@ def run_simulation(
                 updates[a] = crafted
 
         stack = torch.stack([updates[c.device] for c in clients])
-        verdicts = score_updates(stack, cfg.cos_min, cfg.ratio_max)
-        if not defence.gate:
-            # Without a gate the verdicts are still logged, but nothing is rejected.
-            verdicts = [GateVerdict(v.cosine, v.norm_ratio, True, max(v.score, 50), "gate disabled") for v in verdicts]
+        devices = [c.device for c in clients]
+        verdicts = gate_round(stack, devices, defence, cfg.cos_min, cfg.ratio_max)
+        if cfg.dishonest_server:
+            verdicts = falsify(verdicts, devices, attackers)
 
         keep = []
         round_records = []
@@ -168,7 +168,7 @@ def run_simulation(
             v = verdicts[i]
             rep_before = ledger.reputation(c.device)
             on_probation = defence.reputation and rep_before < REP_PROBATION
-            included = v.passed and not on_probation
+            included = is_included(v, defence, rep_before)
             record = {
                 "round": round_no,
                 "client": c.device,
