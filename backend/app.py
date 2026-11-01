@@ -44,6 +44,7 @@ class SimulationRequest(BaseModel):
     rounds: int = Field(10, ge=1, le=30)
     seed: int = Field(1, ge=0, le=1_000_000)
     compare: bool = False
+    dishonest_server: bool = False
 
     @field_validator("attack")
     @classmethod
@@ -114,6 +115,7 @@ def status() -> dict:
     return {
         "ok": True,
         "chain": _chain_status(),
+        "storage": manager.store.status(),
         "model": bundle.meta,
         "simulation_running": manager.busy(),
         "runs": len(manager.runs),
@@ -127,6 +129,7 @@ def options() -> dict:
         "defences": [{"id": k, "label": DEFENCE_LABELS[k]} for k in DEFENCES],
         "devices": [{"id": k, "name": v[0]} for k, v in DEVICES.items()],
         "classes": list(CLASSES),
+        "fog_groups": FOG_GROUPS,
     }
 
 
@@ -136,7 +139,7 @@ def start_simulation(req: SimulationRequest) -> dict:
     if req.attack != "none" and n == 0:
         raise HTTPException(422, "Choose at least one attacker, or pick 'none' as the attack")
     try:
-        return manager.start(req.attack, n, req.defence, req.rounds, req.seed, req.compare)
+        return manager.start(req.attack, n, req.defence, req.rounds, req.seed, req.compare, req.dishonest_server)
     except RuntimeError as exc:
         raise HTTPException(409, str(exc)) from exc
 
