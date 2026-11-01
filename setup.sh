@@ -11,7 +11,7 @@ for candidate in python3.13 python3.12 python3.11 python3; do
   fi
 done
 if [ -z "$PY" ]; then echo "Python 3.11, 3.12 or 3.13 is required. Install it with: brew install python@3.13"; exit 1; fi
-if ! command -v npm >/dev/null 2>&1; then echo "Node.js is required. Install the LTS from nodejs.org or run: brew install node"; exit 1; fi
+if ! command -v node >/dev/null 2>&1 || ! node -e "process.exit(+process.versions.node.split('.')[0] >= 18 ? 0 : 1)"; then echo "Node.js 18 or newer is required. Install the LTS from nodejs.org or run: brew install node"; exit 1; fi
 
 echo "== Python environment =="
 "$PY" -m venv .venv
@@ -26,4 +26,4 @@ echo "== Tests =="
 (cd blockchain && HARDHAT_DISABLE_TELEMETRY_PROMPT=true npx hardhat test)
 
 echo
-echo "Setup finished. Start the demo with:  .venv/bin/python scripts/start_demo.py"
+echo "Setup finished. Start the demo with:  bash start.sh"
