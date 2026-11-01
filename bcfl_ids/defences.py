@@ -5,7 +5,7 @@ from dataclasses import asdict, dataclass
 
 import torch
 
-from .config import SCORE_PASS
+from .config import FOG_OF, REP_PROBATION, SCORE_PASS, Defence
 
 
 @dataclass
@@ -53,6 +53,35 @@ def score_updates(updates: torch.Tensor, cos_min: float, ratio_max: float) -> li
         score, passed, reason = quality_score(cos, ratio, cos_min, ratio_max)
         verdicts.append(GateVerdict(round(cos, 6), round(ratio, 6), passed, score, reason))
     return verdicts
+
+
+def gate_round(updates: torch.Tensor, devices: list[int], defence: Defence, cos_min: float, ratio_max: float) -> list[GateVerdict]:
+    """One round's verdicts, in device order. The simulator and the auditor both decide with this."""
+    if defence.fog:
+        verdicts: dict[int, GateVerdict] = {}
+        for fog in sorted({FOG_OF[d] for d in devices}):
+            members = [i for i, d in enumerate(devices) if FOG_OF[d] == fog]
+            verdicts.update(zip(members, score_updates(updates[members], cos_min, ratio_max)))
+        ordered = [verdicts[i] for i in range(len(devices))]
+    else:
+        ordered = score_updates(updates, cos_min, ratio_max)
+    if not defence.gate:
+        # Without a gate the verdicts are still logged, but nothing is rejected.
+        return [GateVerdict(v.cosine, v.norm_ratio, True, max(v.score, SCORE_PASS), "gate disabled") for v in ordered]
+    return ordered
+
+
+def is_included(verdict: GateVerdict, defence: Defence, rep_before: int) -> bool:
+    return verdict.passed and not (defence.reputation and rep_before < REP_PROBATION)
+
+
+def apply_round(w: torch.Tensor, updates: torch.Tensor, keep: list[int], sizes: torch.Tensor, defence: Defence, trim: int, krum_f: int) -> torch.Tensor:
+    """The next global model. If every update failed, the model stays where it is."""
+    step = aggregate(updates[keep], sizes[keep], defence.agg, trim, krum_f) if keep else torch.zeros_like(w)
+    w = w + step
+    if not torch.isfinite(w).all():  # A diverged model is a failed defence, not a crash.
+        w = torch.nan_to_num(w, nan=0.0, posinf=1e6, neginf=-1e6).clamp(-1e6, 1e6)
+    return w
 
 
 def weighted_mean(updates: torch.Tensor, weights: torch.Tensor) -> torch.Tensor:
