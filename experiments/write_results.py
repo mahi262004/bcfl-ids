@@ -100,7 +100,7 @@ def main() -> None:
     out += [
         "## Gate calibration (validation split)",
         "",
-        f"Across {cal['honest_client_rounds']} honest client-rounds, cosine to the median ranged from {pct['0']:.3f} to {pct['100']:.3f} and the norm ratio from {rat['0']:.3f} to {rat['100']:.3f}. The chosen limits are cosine at least 0.1 and norm ratio at most 3.",
+        f"Across {cal['honest_client_rounds']} honest client-rounds, cosine to the median ranged from {pct['0']:.3f} to {pct['100']:.3f} and the norm ratio from {rat['0']:.3f} to {rat['100']:.3f}. The chosen limits are cosine at least 0.1 and norm ratio at most 2.",
         "",
         "## Explanations",
         "",
@@ -125,6 +125,7 @@ def main() -> None:
         "- 11-class detection, where the report used binary labels.",
         "- Chronological split, where the report used a random stratified split.",
         "- Cosine limit 0.1, where the report used -0.1, chosen from a new calibration on validation data.",
+        "- Norm ratio measured against the median update size, where the report used the norm of the median update. The first full run of this grid showed the report's form lets Min-Max attackers get honest updates rejected. The fix was chosen on validation data and the affected runs were repeated, but it was prompted by test results, which is a mild selection effect.",
         "- Mean benign traffic as the explanation baseline, where the report used the mean of all traffic.",
         "- Random attacker sets per seed, where the report fixed devices 4, 1 and 6.",
         "- Added attacks: scaling, targeted evasion, LIE, Min-Max, Fang, statistics poisoning. Added defences for comparison: median, Multi-Krum, and each layer separately.",

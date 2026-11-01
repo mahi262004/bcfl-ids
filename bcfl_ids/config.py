@@ -116,7 +116,7 @@ class SimConfig:
     trim: int = 3  # values dropped from each end, per coordinate
     krum_f: int = 3
     cos_min: float = 0.1  # calibrated on validation data, see calibration.json
-    ratio_max: float = 3.0
+    ratio_max: float = 2.0  # update size / median update size; honest updates stay below 1.35 on validation data
     attacker_ids: list[int] = field(default_factory=list)  # chosen from the seed when empty
 
     def to_dict(self) -> dict:

@@ -275,8 +275,8 @@
    "top20_overlap_to_clean": 0.8
   },
   "fang_trim": {
-   "macro_f1": 0.6606731344496178,
-   "spearman_to_clean": 0.9578158289276415,
+   "macro_f1": 0.6662803546578767,
+   "spearman_to_clean": 0.9435413872011365,
    "top20_overlap_to_clean": 0.85
   },
   "adaptive_gate": {

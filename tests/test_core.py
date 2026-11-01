@@ -99,6 +99,17 @@ def test_gate_catches_sign_flip_and_scaling():
     assert all(v.passed for v in verdicts[2:])
 
 
+def test_size_check_uses_typical_update_size_not_the_norm_of_the_median():
+    """Regression: when updates disagree, the median vector is short, so honest updates looked too large."""
+    torch.manual_seed(0)
+    updates = 0.1 * torch.randn(500) + torch.randn(9, 500)
+    old_ratio = updates.norm(dim=1) / updates.median(dim=0).values.norm()
+    assert (old_ratio > 2.0).all()  # the old formula would have rejected every one of these
+    verdicts = score_updates(updates, 0.1, 2.0)
+    assert all(v.norm_ratio < 1.2 for v in verdicts)
+    assert all(v.passed for v in verdicts)
+
+
 # --- aggregators --------------------------------------------------------------------------------
 def test_trimmed_mean_stays_in_honest_range():
     honest = torch.randn(6, 50)

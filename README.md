@@ -14,7 +14,7 @@ All attacks are simulated, and all traffic is replayed from the N-BaIoT dataset.
 
 ## Run the demo
 
-You need Python 3.11 or newer and Node.js 18 or newer. Setup needs internet once; afterwards the demo runs offline.
+You need Python 3.11, 3.12 or 3.13 and Node.js 18 or newer. Setup needs internet once; afterwards the demo runs offline.
 
 **macOS or Linux**
 

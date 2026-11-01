@@ -1,5 +1,9 @@
 [
   "Attack versus benign is easy on this dataset: a depth-3 decision tree already reaches about 99.8%. Robustness under attack is the meaningful result, not that number.",
+  "The defence is built for up to 3 attackers of 9. With 4, it breaks under some attacks: macro F1 falls to about 0.05 (adaptive), 0.17 (Fang) and 0.01 (statistics poisoning), and for the first two that is worse than no defence.",
+  "The adaptive attacker is the hardest case within the limit: it passes the gate every time, macro F1 falls to about 0.60 and the worst device's benign recall to about 0.77. A plain coordinate median does better against it (0.64).",
+  "Reputation adds no measurable accuracy over the gate alone. Its value here is the audit trail.",
+  "The gate's size check was changed after the first full run exposed a flaw against Min-Max. The fix was chosen on validation data, but it was prompted by test results, which is a mild selection effect.",
   "Two pairs of attack families (gafgyt tcp/udp, gafgyt junk/combo) are close to indistinguishable on later traffic with these features, even for a pooled random forest, which caps macro F1.",
   "Results come from one dataset, captured in 2018. Nothing here shows the model works on other networks or newer malware. No physical device was tested.",
   "All attackers are simulated and all traffic is replayed from the dataset. No real malware was used.",

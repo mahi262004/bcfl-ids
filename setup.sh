@@ -3,12 +3,14 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+# The pinned PyTorch has wheels for Python 3.11 to 3.13 only, so a newer default python3 will not do.
 PY=""
 for candidate in python3.13 python3.12 python3.11 python3; do
-  if command -v "$candidate" >/dev/null 2>&1; then PY="$candidate"; break; fi
+  if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c 'import sys; sys.exit(0 if (3, 11) <= sys.version_info[:2] <= (3, 13) else 1)'; then
+    PY="$candidate"; break
+  fi
 done
-if [ -z "$PY" ]; then echo "Python 3.11+ is required. Install it from python.org or run: brew install python@3.13"; exit 1; fi
-"$PY" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)' || { echo "Python 3.11+ is required, found $("$PY" --version)"; exit 1; }
+if [ -z "$PY" ]; then echo "Python 3.11, 3.12 or 3.13 is required. Install it with: brew install python@3.13"; exit 1; fi
 if ! command -v npm >/dev/null 2>&1; then echo "Node.js is required. Install the LTS from nodejs.org or run: brew install node"; exit 1; fi
 
 echo "== Python environment =="

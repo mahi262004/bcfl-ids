@@ -41,12 +41,13 @@ def quality_score(cos: float, ratio: float, cos_min: float, ratio_max: float) ->
 
 
 def score_updates(updates: torch.Tensor, cos_min: float, ratio_max: float) -> list[GateVerdict]:
-    """Compare each update with the coordinate-wise median of all updates."""
+    """Check each update's direction against the median update, and its size against the median size."""
     median = updates.median(dim=0).values
-    median_norm = median.norm().clamp_min(1e-12)
     norms = updates.norm(dim=1).clamp_min(1e-12)
-    cosines = (updates @ median) / (norms * median_norm)
-    ratios = norms / median_norm
+    cosines = (updates @ median) / (norms * median.norm().clamp_min(1e-12))
+    # Relative to the typical update size. Using the norm of the median vector instead lets
+    # colluding attackers shrink that vector, which makes honest updates look too large.
+    ratios = norms / norms.median().clamp_min(1e-12)
     verdicts = []
     for cos, ratio in zip(cosines.tolist(), ratios.tolist()):
         score, passed, reason = quality_score(cos, ratio, cos_min, ratio_max)
