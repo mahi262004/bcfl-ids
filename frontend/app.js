@@ -514,7 +514,22 @@
     if (detail) v.appendChild(make("small", "", detail));
   }
   const whereLabel = { ipfs: "IPFS node", local: "Local folder", swapped: "Swapped file", missing: "Missing" };
+  function drawFogMeasured() {
+    const body = document.querySelector("#fogMeasured tbody");
+    body.textContent = "";
+    const spread = (state.results?.fog_eval?.cells || []).filter((c) => c.attack !== "none").map((c) => ({ ...c, placement: "one per node" }));
+    const cells = [...spread, ...(state.results?.fog_crowded?.cells || [])];
+    const keys = [...new Set(cells.map((c) => `${c.attack}|${c.placement}`))];
+    for (const key of keys) {
+      const group = cells.filter((c) => `${c.attack}|${c.placement}` === key);
+      const central = group.find((c) => c.defence === "proposed");
+      const fog = group.find((c) => c.defence === "fog");
+      if (!central || !fog) continue;
+      body.appendChild(row([{ text: pretty(fog.attack) }, { text: fog.placement }, { text: num(central.macro_f1), cls: "num" }, { text: num(fog.macro_f1), cls: "num" }, { text: pct(central.attacker_reject_rate, 0), cls: "num" }, { text: pct(fog.attacker_reject_rate, 0), cls: "num" }, { text: pct(fog.false_reject_rate, 0), cls: "num" }]));
+    }
+  }
   async function refreshFog() {
+    drawFogMeasured();
     const runs = await api("/api/simulations").catch(() => []);
     const usable = runs.filter((r) => r.status === "finished");
     const previous = state.fogRunId;
