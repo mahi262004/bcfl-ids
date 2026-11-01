@@ -196,6 +196,11 @@
       </div>
     </div>
     <div class="card">
+      <h2>Fog nodes compared with one central gate <span class="sub">measured, 3 attackers of 9, 3 seeds</span></h2>
+      <div class="table-wrap tall"><table id="fogMeasured"><thead><tr><th>Attack</th><th>Attackers placed</th><th class="num">Central macro F1</th><th class="num">Fog macro F1</th><th class="num">Central attackers rejected</th><th class="num">Fog attackers rejected</th><th class="num">Fog honest updates rejected</th></tr></thead><tbody></tbody></table></div>
+      <p class="muted small">Accuracy differences of about 0.03 or less are noise. When attackers share a fog node they control its median, so its gate stops rejecting them and can reject an honest device. The central trimmed mean then does the protecting.</p>
+    </div>
+    <div class="card">
       <h2>Stored update files <span class="sub" id="fogFilesSub"></span></h2>
       <div class="table-wrap tall"><table id="fogFiles"><thead><tr><th class="num">Round</th><th>Client</th><th>Verdict on chain</th><th>Address</th><th>Stored in</th></tr></thead><tbody></tbody></table></div>
     </div>
