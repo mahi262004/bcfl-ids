@@ -621,6 +621,28 @@
     resetRecheck();
     await loadFog();
   }));
+  $("fogRecheck").addEventListener("click", guard(async () => {
+    fogVerdict("info", "Re-checking…", "Fetching every stored update and rerunning the decisions.");
+    const res = await api(`/api/audit/${state.fogRunId}/recheck`, { method: "POST" });
+    const records = res.chain_records_check ? "The record check on Blockchain audit passes for this run." : "The record check on Blockchain audit also fails for this run.";
+    if (res.valid) {
+      fogVerdict("ok", `Verified: ${res.rounds_checked} rounds recomputed from ${res.files_checked} stored files give the same decisions and models.`, records);
+    } else {
+      const p = res.problems[0];
+      const who = p.client ? `Round ${p.round}, client ${p.client}` : `Round ${p.round}`;
+      fogVerdict("bad", `Re-check failed: ${res.problems.length} ${res.problems.length === 1 ? "problem" : "problems"} across ${res.rounds_checked} rounds.`, `${who}: ${p.problem}. ${records}`);
+    }
+    const body = document.querySelector("#fogRecheckTable tbody");
+    body.textContent = "";
+    res.rounds.forEach((r) => {
+      const differ = r.decisions_differ === null ? "n/a" : String(r.decisions_differ);
+      const model = make("span", r.model === "matches" ? "tag ok" : r.model === "differs" ? "tag bad" : "tag warn", r.model === "matches" ? "Matches" : r.model === "differs" ? "Differs" : "Not checked");
+      const tr = row([{ text: r.round, cls: "num" }, { text: `${r.files} of ${r.files_expected}`, cls: "num" }, { text: differ, cls: "num" }, { node: model }]);
+      if (r.decisions_differ || r.model !== "matches" || r.files !== r.files_expected) tr.classList.add("highlight");
+      body.appendChild(tr);
+    });
+    await loadFog();
+  }));
   /* ---------- evaluation ---------- */
   function renderResults() {
     const g = state.results?.grid_summary;
