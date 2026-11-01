@@ -171,10 +171,12 @@ class Manager:
             def on_round(row: dict) -> None:
                 run.rounds.append(row)
 
-            result = run_simulation(self.bundle.clients, cfg, ledger=ledger, on_round=on_round, should_stop=self.stop_flag.is_set)
+            result = run_simulation(self.bundle.clients, cfg, ledger=ledger, store=self.store, on_round=on_round, should_stop=self.stop_flag.is_set)
             run.records = result["records"]
             run.original_records = copy.deepcopy(result["records"])
             run.final = result["final"]
+            run.sizes = result["sizes"]
+            run.scale = result["scale"]
             run.summary = {
                 "false_reject_rate": result["false_reject_rate"],
                 "attacker_reject_rate": result["attacker_reject_rate"],
