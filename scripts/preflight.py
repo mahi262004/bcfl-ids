@@ -69,6 +69,19 @@ def main() -> None:
     check("Run logged on the chain", chain["backend"] == "chain", chain["backend"])
     check("One entry per client per round", len(chain["entries"]) == 45, str(len(chain["entries"])))
     check("Records verify", call(f"/api/chain/{run_id}/verify", {})["valid"])
+    storage = call("/api/status")["storage"]
+    check("IPFS node connected", storage["connected"], f"version {storage['version']}" if storage["connected"] else "using the local folder")
+    recheck = call(f"/api/audit/{run_id}/recheck", {})
+    check("Decisions re-check from stored files", recheck["valid"], f"{recheck['files_checked']} files, {recheck['rounds_checked']} rounds")
+    package = call(f"/api/model/{run_id}/file")
+    request = urllib.request.Request(f"{BASE}/api/model/{run_id}/check", data=package, method="POST")
+    with urllib.request.urlopen(request, timeout=30) as r:
+        check("Downloaded model matches the chain", json.loads(r.read())["matches"])
+    lying = wait_job(call("/api/simulations", {"attack": "sign_flip", "n_attackers": 3, "defence": "fog", "rounds": 5, "seed": 7, "compare": False, "dishonest_server": True}))[0]
+    check("Fog run finishes", lying["status"] == "finished", str(lying["error"] or ""))
+    check("Lying server passes the record check", call(f"/api/chain/{lying['id']}/verify", {})["valid"])
+    check("Lying server is caught by the re-check", not call(f"/api/audit/{lying['id']}/recheck", {})["valid"])
+
     call(f"/api/chain/{run_id}/tamper", {})
     check("Tampering detected", call(f"/api/chain/{run_id}/verify", {})["valid"] is False)
     call(f"/api/chain/{run_id}/restore", {})
