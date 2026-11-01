@@ -275,6 +275,49 @@ def chain_restore(run_id: str) -> dict:
     return {"restored": True}
 
 
+def _final_model(run: Run) -> dict:
+    """The last anchored model, read from the store and checked against its on-chain hash."""
+    models = _read_ledger(lambda: run.ledger.models)
+    if not models:
+        raise HTTPException(409, "This run recorded no global model")
+    latest = models[-1]
+    cid = cid_from_hash(latest["model_hash"])
+    try:
+        data = manager.store.get(cid)
+    except FileMismatch as exc:
+        raise HTTPException(409, "The stored model does not match its on-chain hash, so it will not be served") from exc
+    except FileMissing as exc:
+        raise HTTPException(409, "The stored model is gone. The local store is cleared when the demo restarts, so run a new simulation.") from exc
+    return {"round": latest["round"], "model_hash": latest["model_hash"], "cid": cid, "data": data}
+
+
+@app.get("/api/audit/{run_id}")
+def audit_overview(run_id: str) -> dict:
+    run = _finished_run(run_id)
+    entries = _read_ledger(lambda: run.ledger.entries)
+    models = _read_ledger(lambda: run.ledger.models)
+    files = []
+    for entry in entries:
+        cid = cid_from_hash(entry["update_hash"])
+        try:
+            where = manager.store.read(cid)[1]
+        except (FileMismatch, FileMissing) as exc:
+            where = "swapped" if isinstance(exc, FileMismatch) else "missing"
+        files.append({"round": entry["round"], "client": entry["client"], "accepted": entry["accepted"], "cid": cid, "where": where})
+    info = None
+    try:
+        final = _final_model(run)
+        info = {"round": final["round"], "model_hash": final["model_hash"], "cid": final["cid"], "size": len(final["data"])}
+    except HTTPException as exc:
+        info = {"error": exc.detail}
+    return {
+        "backend": run.ledger.backend, "storage": manager.store.status(), "fog_mode": DEFENCES[run.config["defence"]].fog,
+        "dishonest_server": run.config.get("dishonest_server", False), "config": run.config, "attackers": (run.summary or {}).get("attackers", []),
+        "files": files, "models": len(models), "model": info, "swapped": len(manager.store.swapped),
+        "fog_groups": FOG_GROUPS, "fog_of": {str(k): v for k, v in FOG_OF.items()},
+    }
+
+
 @app.get("/api/results")
 def get_results() -> dict:
     return results
