@@ -8,6 +8,7 @@ blockchain/node_modules/
 blockchain/cache/
 blockchain/artifacts/build-info/
 runtime/
+tools/
 *.log
 .DS_Store
 runtime_grid.log
