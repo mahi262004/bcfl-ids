@@ -15,8 +15,8 @@ import torch
 from torch import nn
 
 from . import attacks as atk
-from .config import DEFENCES, DEVICE_IDS, NUM_CLASSES, REP_PROBATION, SimConfig
-from .defences import GateVerdict, aggregate, score_updates
+from .config import DEFENCES, DEVICE_IDS, FOG_OF, NUM_CLASSES, REP_PROBATION, SimConfig
+from .defences import GateVerdict, aggregate, apply_round, gate_round, is_included, score_updates
 from .ledger import InMemoryLedger, canonical_hash, sha256_hex
 from .metrics import summarise
 from .model import Detector, initial_weights, load_flat, to_flat
