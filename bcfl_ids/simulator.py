@@ -1,7 +1,7 @@
 """Federated training loop with attacks, trust gate, reputation ledger and explanation records.
 
 All nine clients run in one process. The server logic is the same logic a networked deployment
-would run (see flower_app.py), but this form is fast and exactly repeatable for experiments.
+would run (see flower_app.py), but this form is fast and, for a given thread count, repeatable.
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from torch import nn
 
 from . import attacks as atk
 from .config import DEFENCES, DEVICE_IDS, FOG_OF, NUM_CLASSES, REP_PROBATION, SimConfig
-from .defences import GateVerdict, aggregate, apply_round, gate_round, is_included, score_updates
+from .defences import GateVerdict, apply_round, gate_round, is_included
 from .ledger import InMemoryLedger, canonical_hash, sha256_hex
 from .metrics import summarise
 from .model import Detector, initial_weights, load_flat, to_flat
@@ -225,6 +225,7 @@ def run_simulation(
         "attacker_reject_rate": attacker_rejects / attacker_rounds if attacker_rounds else None,
         "weights": w,
         "scale": scale,
+        "sizes": {c.device: int(n) for c, n in zip(clients, sizes.tolist())},
         "elapsed_s": time.time() - started,
         "ledger_backend": ledger.backend,
     }
