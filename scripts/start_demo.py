@@ -133,10 +133,14 @@ def main() -> None:
 
     LOGS.mkdir(exist_ok=True)
     os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")  # macOS: numpy and torch may each bring an OpenMP
+    os.environ.setdefault("BCFL_IPFS_API", f"http://127.0.0.1:{IPFS_API_PORT}")
+    shutil.rmtree(LOGS / "updates", ignore_errors=True)  # Runs do not survive a restart.
     procs: list = []
+    ipfs_procs: list = []
     try:
         if not args.no_chain:
             start_chain(procs)
+        start_ipfs(ipfs_procs)
         port = free_port(args.port)
         log = open(LOGS / "api.log", "w")
         api = subprocess.Popen([sys.executable, "-m", "uvicorn", "backend.app:app", "--host", "127.0.0.1", "--port", str(port), "--log-level", "warning"], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
@@ -159,10 +163,14 @@ def main() -> None:
                 restarted: list = []
                 start_chain(restarted)
                 procs[:0] = restarted
+            if ipfs_procs and ipfs_procs[0].poll() is not None and not port_open(IPFS_API_PORT):
+                print("The IPFS node stopped. Restarting it.", flush=True)
+                ipfs_procs.clear()
+                start_ipfs(ipfs_procs)
     except KeyboardInterrupt:
         print("\nStopping.")
     finally:
-        stop_all(procs)
+        stop_all(procs + ipfs_procs)
 
 
 if __name__ == "__main__":
