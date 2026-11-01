@@ -318,6 +318,13 @@ def audit_overview(run_id: str) -> dict:
     }
 
 
+@app.post("/api/audit/{run_id}/recheck")
+def audit_recheck(run_id: str) -> dict:
+    run = _finished_run(run_id)
+    entries, models = _read_ledger(lambda: (run.ledger.entries, run.ledger.models))
+    return {**recheck_run(run.config, entries, models, run.sizes, manager.store), "chain_records_check": manager.audit_run(run)["valid"]}
+
+
 @app.get("/api/results")
 def get_results() -> dict:
     return results
