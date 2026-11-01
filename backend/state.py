@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import threading
 import time
 import traceback
@@ -13,13 +14,14 @@ import numpy as np
 import torch
 
 from bcfl_ids.chain import ChainLedger, audit, chain_available
-from bcfl_ids.config import CLASSES, DEFENCE_LABELS, DEMO_DIR, RESULTS_DIR, SimConfig
+from bcfl_ids.config import CLASSES, DEFENCE_LABELS, DEMO_DIR, RESULTS_DIR, RUNTIME_DIR, SimConfig
 from bcfl_ids.data import signed_log
 from bcfl_ids.explain import attack_score, integrated_gradients, parse_feature
 from bcfl_ids.ledger import InMemoryLedger
 from bcfl_ids.model import Detector, load_flat
 from bcfl_ids.scaler import Scale
 from bcfl_ids.simulator import ClientData, run_simulation
+from bcfl_ids.storage import DEFAULT_IPFS_API, IpfsClient, UpdateStore
 
 
 class Bundle:
@@ -117,6 +119,7 @@ class Manager:
         self.active_job: dict | None = None
         self.lock = threading.Lock()
         self.stop_flag = threading.Event()
+        self.store = UpdateStore(RUNTIME_DIR / "updates", IpfsClient(os.environ.get("BCFL_IPFS_API", DEFAULT_IPFS_API)))
 
     def busy(self) -> bool:
         return self.active_job is not None and self.active_job["status"] == "running"
