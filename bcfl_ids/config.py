@@ -85,6 +85,7 @@ DEFENCE_LABELS = {
     "gate_rep": "Trust gate + reputation",
     "gate_trim": "Trust gate + trimmed mean",
     "proposed": "Proposed (full stack)",
+    "fog": "Fog nodes + full stack",
 }
 
 ATTACK_INFO = {
