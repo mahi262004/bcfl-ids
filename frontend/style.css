@@ -244,3 +244,4 @@ tr.highlight td { background: var(--bad-bg); }
 @media (forced-colors: active) {
   .legend i, .tooltip .t-row i { forced-color-adjust: none; }
 }
+@media (max-width: 1500px) { .brand-sub { display: none; } }
