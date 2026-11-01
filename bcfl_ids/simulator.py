@@ -87,8 +87,17 @@ def evaluate_cube(model: nn.Module, clients: list[ClientData], scale: Scale, chu
     return cube
 
 
+def update_bytes(w: torch.Tensor) -> bytes:
+    return w.numpy().astype(np.float32).tobytes()
+
+
 def weights_hash(w: torch.Tensor) -> str:
-    return sha256_hex(w.numpy().astype(np.float32).tobytes())
+    return sha256_hex(update_bytes(w))
+
+
+def falsify(verdicts: list[GateVerdict], devices: list[int], attackers: list[int]) -> list[GateVerdict]:
+    """Demo of a lying server: attackers' failed updates are recorded and used as if they were clean."""
+    return [GateVerdict(0.97, 1.02, True, 90, "within limits") if d in attackers and not v.passed else v for v, d in zip(verdicts, devices)]
 
 
 def run_simulation(
