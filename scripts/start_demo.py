@@ -21,6 +21,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LOGS = ROOT / "runtime"
 RPC_PORT = 8545
+IPFS_API_PORT = 5901
+IPFS_GATEWAY_PORT = 8901
+IPFS_BINARY = ROOT / "tools" / "ipfs" / ("ipfs.exe" if os.name == "nt" else "ipfs")
 
 
 def port_open(port: int) -> bool:
