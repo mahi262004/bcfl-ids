@@ -21,6 +21,9 @@ echo "== Python environment =="
 echo "== Blockchain tools =="
 (cd blockchain && npm ci --no-audit --no-fund)
 
+echo "== IPFS node =="
+.venv/bin/python scripts/install_ipfs.py
+
 echo "== Tests =="
 .venv/bin/python -m pytest -q
 (cd blockchain && HARDHAT_DISABLE_TELEMETRY_PROMPT=true npx hardhat test)
