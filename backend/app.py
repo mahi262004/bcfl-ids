@@ -1,18 +1,23 @@
 """REST API and static hosting for the dashboard. Binds to localhost only; see scripts/start_demo.py."""
 from __future__ import annotations
 
+import io
+import json
 import os
 from pathlib import Path
 
 import numpy as np
 import torch
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
 from bcfl_ids.chain import DEFAULT_RPC, chain_available
-from bcfl_ids.config import ATTACK_INFO, CLASSES, DEFENCE_LABELS, DEFENCES, DEVICES, NUM_FEATURES, ROOT
+from bcfl_ids.config import ATTACK_INFO, CLASSES, DEFENCE_LABELS, DEFENCES, DEVICES, FOG_GROUPS, FOG_OF, NUM_FEATURES, ROOT
+from bcfl_ids.ledger import sha256_hex
+from bcfl_ids.reverify import recheck_run
+from bcfl_ids.storage import FileMismatch, FileMissing, cid_from_hash, cid_for
 
 from .state import Bundle, Manager, Run, load_results
 
