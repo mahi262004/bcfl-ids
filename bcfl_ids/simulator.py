@@ -197,14 +197,10 @@ def run_simulation(
                 honest_rounds += 1
                 false_rejects += not v.passed
 
-        if not keep:  # Every update failed: leave the global model unchanged this round.
-            step = torch.zeros_like(w)
-        else:
-            step = aggregate(stack[keep], sizes[keep], defence.agg, cfg.trim, cfg.krum_f)
-        w = w + step
-        if not torch.isfinite(w).all():  # A diverged model is a failed defence, not a crash.
-            w = torch.nan_to_num(w, nan=0.0, posinf=1e6, neginf=-1e6).clamp(-1e6, 1e6)
+        w = apply_round(w, stack, keep, sizes, defence, cfg.trim, cfg.krum_f)
         model_hash = weights_hash(w)
+        if store is not None:
+            store.put(update_bytes(w))
         ledger.anchor_model(round_no, model_hash)
         records.extend(round_records)
 
