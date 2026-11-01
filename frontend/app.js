@@ -505,6 +505,122 @@
     await loadChain();
   }));
 
+  /* ---------- fog and IPFS ---------- */
+  function fogVerdict(kind, title, detail, id = "fogVerdict") {
+    const v = $(id);
+    v.hidden = false;
+    v.className = `verdict ${kind}`;
+    v.textContent = title;
+    if (detail) v.appendChild(make("small", "", detail));
+  }
+  const whereLabel = { ipfs: "IPFS node", local: "Local folder", swapped: "Swapped file", missing: "Missing" };
+  async function refreshFog() {
+    const runs = await api("/api/simulations").catch(() => []);
+    const usable = runs.filter((r) => r.status === "finished");
+    const previous = state.fogRunId;
+    fillSelect($("fogRun"), usable.map((r) => ({ value: r.id, label: `${pretty(r.attack)} (${r.n_attackers} attackers), ${r.label}` })), previous);
+    const hasRuns = usable.length > 0;
+    for (const id of ["fogRecheck", "fogSwap", "fogRestore", "fogCheckFile"]) $(id).disabled = !hasRuns;
+    $("fogDownload").setAttribute("aria-disabled", String(!hasRuns));
+    if (!hasRuns) {
+      fogVerdict("info", "No finished run yet.", "Run a simulation in the Attack lab first. For fog nodes, choose the defence Fog nodes + full stack.");
+      for (const id of ["fogTiles", "fogNodes", "fogModel"]) $(id).textContent = "";
+      document.querySelector("#fogFiles tbody").textContent = "";
+      return;
+    }
+    if (!usable.some((r) => r.id === previous)) {
+      state.fogRunId = usable.find((r) => r.label.startsWith("Fog"))?.id || usable.find((r) => r.label.startsWith("Proposed"))?.id || usable[0].id;
+      $("fogRun").value = state.fogRunId;
+      fogVerdict("info", "Ready.", "Re-check fetches every stored update by its on-chain hash, reruns the gate and aggregation, and compares the outcome with the chain.");
+    }
+    await loadFog();
+  }
+  function resetRecheck() {
+    const body = document.querySelector("#fogRecheckTable tbody");
+    body.textContent = "";
+    const tr = document.createElement("tr");
+    const td = make("td", "muted", "Press Re-check to fill this in.");
+    td.colSpan = 4;
+    tr.appendChild(td);
+    body.appendChild(tr);
+  }
+  async function loadFog() {
+    const [data, view] = await Promise.all([api(`/api/audit/${state.fogRunId}`), api(`/api/simulations/${state.fogRunId}`)]);
+    state.fogData = data;
+    state.fogView = view;
+    const tiles = $("fogTiles");
+    tiles.textContent = "";
+    const inIpfs = data.files.filter((f) => f.where === "ipfs").length;
+    tile(tiles, "Update store", data.storage.connected ? "Private IPFS node" : "Local folder", data.storage.connected ? `Kubo ${data.storage.version}, no network access` : "start the IPFS node to use it; addresses stay the same", true);
+    tile(tiles, "Update files", String(data.files.length), `${inIpfs} on IPFS, ${data.files.length - inIpfs} elsewhere`);
+    tile(tiles, "Gating", data.fog_mode ? "3 fog nodes" : "Central", data.fog_mode ? "each gates its own 3 devices" : "one gate over all 9 devices", true);
+    tile(tiles, "Trust ledger", data.backend === "chain" ? "Blockchain" : "In-memory", data.backend === "chain" ? "hashes read from the contract" : "the chain was offline for this run", true);
+    if (data.dishonest_server) tile(tiles, "Server behaviour", "Lying", "this run wrote false verdicts on purpose", true);
+    const rounds = view.rounds.map((r) => r.round);
+    fillSelect($("fogRound"), rounds.map((r) => ({ value: r, label: `Round ${r}` })), rounds[rounds.length - 1]);
+    drawFogNodes();
+
+    const names = Object.fromEntries(state.options.devices.map((d) => [d.id, d.name]));
+    const model = $("fogModel");
+    model.textContent = "";
+    const download = $("fogDownload");
+    if (data.model && !data.model.error) {
+      for (const [k, v] of [["From round", data.model.round], ["Size", `${(data.model.size / 1024).toFixed(0)} KB of weights`], ["On-chain hash", short(data.model.model_hash)], ["IPFS address", short(data.model.cid)]]) {
+        const kv = make("div", "kv");
+        kv.appendChild(make("span", "", k));
+        kv.appendChild(make("b", "", String(v)));
+        model.appendChild(kv);
+      }
+      download.href = `/api/model/${state.fogRunId}/file`;
+      download.setAttribute("aria-disabled", "false");
+    } else {
+      model.appendChild(make("p", "muted", data.model?.error || "No model available."));
+      download.removeAttribute("href");
+      download.setAttribute("aria-disabled", "true");
+    }
+    $("fogFilesSub").textContent = `${data.files.length} updates, one per client per round`;
+    const body = document.querySelector("#fogFiles tbody");
+    body.textContent = "";
+    data.files.forEach((f) => {
+      const verdict = f.accepted ? make("span", "tag ok", "Accepted") : make("span", "tag bad", "Rejected");
+      const where = make("span", f.where === "ipfs" ? "tag ok" : f.where === "local" ? "tag warn" : "tag bad", whereLabel[f.where] || f.where);
+      body.appendChild(row([{ text: f.round, cls: "num" }, { text: names[f.client] }, { node: verdict }, { text: short(f.cid), cls: "mono", title: f.cid }, { node: where }]));
+    });
+  }
+  function drawFogNodes() {
+    const host = $("fogNodes");
+    host.textContent = "";
+    const data = state.fogData;
+    const round = state.fogView?.rounds.find((r) => r.round === Number($("fogRound").value));
+    if (!data || !round) return;
+    const names = Object.fromEntries(state.options.devices.map((d) => [d.id, d.name]));
+    $("fogSub").textContent = data.fog_mode ? "each node gates only its own devices, then forwards what passes" : "this run used one central gate; shown by group for comparison. Choose Fog nodes + full stack in the Attack lab";
+    for (const [fog, devices] of Object.entries(data.fog_groups)) {
+      const clients = devices.map((d) => round.clients.find((c) => c.client === d));
+      const card = make("div", "fog-node");
+      const head = make("div", "head");
+      head.appendChild(make("span", "", `Fog node ${fog}`));
+      head.appendChild(make("span", "muted", `${clients.filter((c) => c.included).length} of ${clients.length} forwarded`));
+      card.appendChild(head);
+      for (const c of clients) {
+        const line = make("div", "fog-device");
+        const left = make("span", "", names[c.client]);
+        left.appendChild(make("small", "", `${c.malicious ? "Simulated attacker, " : ""}cosine ${num(c.cosine)}, size ${num(c.norm_ratio, 2)}`));
+        line.appendChild(left);
+        line.appendChild(c.included ? make("span", "tag ok", "Forwarded") : c.on_probation ? make("span", "tag warn", "Probation") : make("span", "tag bad", "Rejected"));
+        card.appendChild(line);
+      }
+      host.appendChild(card);
+    }
+  }
+  $("fogRound").addEventListener("change", drawFogNodes);
+  $("fogRun").addEventListener("change", guard(async () => {
+    state.fogRunId = $("fogRun").value;
+    fogVerdict("info", "Ready.", "Re-check fetches every stored update by its on-chain hash, reruns the gate and aggregation, and compares the outcome with the chain.");
+    $("fogCheckResult").hidden = true;
+    resetRecheck();
+    await loadFog();
+  }));
   /* ---------- evaluation ---------- */
   function renderResults() {
     const g = state.results?.grid_summary;
