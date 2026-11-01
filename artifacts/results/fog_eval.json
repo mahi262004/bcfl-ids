@@ -1,0 +1,1263 @@
+{
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "train_fraction": 0.05,
+ "rounds": 20,
+ "cells": [
+  {
+   "attack": "none",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6630183869006242,
+     "macro_f1_merged": 0.8598603804430336,
+     "attack_recall": 0.9998570732599438,
+     "benign_recall": 0.9989117530668777,
+     "worst_device_benign_recall": 0.9970588235294118,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    },
+    {
+     "macro_f1": 0.6591045513843464,
+     "macro_f1_merged": 0.8669695201616925,
+     "attack_recall": 0.9999108628932982,
+     "benign_recall": 0.9984980393567651,
+     "worst_device_benign_recall": 0.9953964194373401,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    },
+    {
+     "macro_f1": 0.6675341658331132,
+     "macro_f1_merged": 0.8579114681035087,
+     "attack_recall": 0.9995942724798405,
+     "benign_recall": 0.9984800518041516,
+     "worst_device_benign_recall": 0.9960358056265984,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    }
+   ],
+   "macro_f1": 0.6632190347060279,
+   "macro_f1_merged": 0.8615804562360783,
+   "attack_recall": 0.9997874028776942,
+   "benign_recall": 0.9986299480759314,
+   "worst_device_benign_recall": 0.9961636828644501,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": null
+  },
+  {
+   "attack": "none",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6630183869006242,
+     "macro_f1_merged": 0.8598603804430336,
+     "attack_recall": 0.9998570732599438,
+     "benign_recall": 0.9989117530668777,
+     "worst_device_benign_recall": 0.9970588235294118,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    },
+    {
+     "macro_f1": 0.6591045513843464,
+     "macro_f1_merged": 0.8669695201616925,
+     "attack_recall": 0.9999108628932982,
+     "benign_recall": 0.9984980393567651,
+     "worst_device_benign_recall": 0.9953964194373401,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    },
+    {
+     "macro_f1": 0.6675341658331132,
+     "macro_f1_merged": 0.8579114681035087,
+     "attack_recall": 0.9995942724798405,
+     "benign_recall": 0.9984800518041516,
+     "worst_device_benign_recall": 0.9960358056265984,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": null,
+     "most_attackers_in_one_fog": 0,
+     "attackers": []
+    }
+   ],
+   "macro_f1": 0.6632190347060279,
+   "macro_f1_merged": 0.8615804562360783,
+   "attack_recall": 0.9997874028776942,
+   "benign_recall": 0.9986299480759314,
+   "worst_device_benign_recall": 0.9961636828644501,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": null
+  },
+  {
+   "attack": "label_flip",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6778999178308226,
+     "macro_f1_merged": 0.889753804443572,
+     "attack_recall": 0.9992720483887716,
+     "benign_recall": 0.9409169726642187,
+     "worst_device_benign_recall": 0.7719411149545491,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.08333333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6457703216693425,
+     "macro_f1_merged": 0.8375749529376849,
+     "attack_recall": 0.9977327406924112,
+     "benign_recall": 0.7025448028673835,
+     "worst_device_benign_recall": 0.5993081811600032,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.03333333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6342510563072202,
+     "macro_f1_merged": 0.8158319308485219,
+     "attack_recall": 0.9326128845528627,
+     "benign_recall": 0.9961170656568898,
+     "worst_device_benign_recall": 0.9828270902651068,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.652640431935795,
+   "macro_f1_merged": 0.8477202294099263,
+   "attack_recall": 0.9765392245446819,
+   "benign_recall": 0.8798596137294975,
+   "worst_device_benign_recall": 0.7846921287932197,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.03888888888888889
+  },
+  {
+   "attack": "label_flip",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6949702668065897,
+     "macro_f1_merged": 0.91058435694922,
+     "attack_recall": 0.9993726419992385,
+     "benign_recall": 0.9992732558139535,
+     "worst_device_benign_recall": 0.9980818414322251,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.1,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6467002017795752,
+     "macro_f1_merged": 0.8483160420747924,
+     "attack_recall": 0.998889672086263,
+     "benign_recall": 0.9969354838709678,
+     "worst_device_benign_recall": 0.9928088440485134,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.1,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.655062431584917,
+     "macro_f1_merged": 0.8521728504316283,
+     "attack_recall": 0.9936787822239374,
+     "benign_recall": 0.9966946922533856,
+     "worst_device_benign_recall": 0.9881936245572609,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.08333333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6655776333903606,
+   "macro_f1_merged": 0.870357749818547,
+   "attack_recall": 0.9973136987698129,
+   "benign_recall": 0.997634477312769,
+   "worst_device_benign_recall": 0.9930281033459999,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.09444444444444444
+  },
+  {
+   "attack": "random_weights",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "random_weights",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "sign_flip",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "sign_flip",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.9833333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9944444444444445
+  },
+  {
+   "attack": "scaling",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "scaling",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 1.0
+  },
+  {
+   "attack": "targeted_evasion",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6511378692247412,
+     "macro_f1_merged": 0.8290596151857964,
+     "attack_recall": 0.9998972430860822,
+     "benign_recall": 0.9990437576499388,
+     "worst_device_benign_recall": 0.9978260869565218,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.8,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6397643822682322,
+   "macro_f1_merged": 0.8330073319116454,
+   "attack_recall": 0.9998404913072064,
+   "benign_recall": 0.998605997918481,
+   "worst_device_benign_recall": 0.9969309462915601,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9333333333333332
+  },
+  {
+   "attack": "targeted_evasion",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6639148927766971,
+     "macro_f1_merged": 0.872260395057109,
+     "attack_recall": 0.999956733930982,
+     "benign_recall": 0.9975520195838433,
+     "worst_device_benign_recall": 0.9916282065042396,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6437605302036155,
+     "macro_f1_merged": 0.8447176239203443,
+     "attack_recall": 0.999963882302911,
+     "benign_recall": 0.9981541218637993,
+     "worst_device_benign_recall": 0.9968030690537084,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.9833333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.62439474737634,
+     "macro_f1_merged": 0.8252447566287953,
+     "attack_recall": 0.9996603485326264,
+     "benign_recall": 0.9986201142417046,
+     "worst_device_benign_recall": 0.9961636828644501,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 1.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6440233901188842,
+   "macro_f1_merged": 0.8474075918687495,
+   "attack_recall": 0.9998603215888399,
+   "benign_recall": 0.998108751896449,
+   "worst_device_benign_recall": 0.9948649861407993,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9944444444444445
+  },
+  {
+   "attack": "lie",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.7122638818641733,
+     "macro_f1_merged": 0.9172349761977626,
+     "attack_recall": 0.9999015696929839,
+     "benign_recall": 0.9975902692778458,
+     "worst_device_benign_recall": 0.991304347826087,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6453842932058382,
+     "macro_f1_merged": 0.8466426712197541,
+     "attack_recall": 0.999954561606888,
+     "benign_recall": 0.9961469534050179,
+     "worst_device_benign_recall": 0.9851662404092072,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6525592386829417,
+     "macro_f1_merged": 0.8279966444148821,
+     "attack_recall": 0.9998493374813985,
+     "benign_recall": 0.9974809062319492,
+     "worst_device_benign_recall": 0.9878516624040921,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.670069137917651,
+   "macro_f1_merged": 0.8639580972774663,
+   "attack_recall": 0.9999018229270901,
+   "benign_recall": 0.997072709638271,
+   "worst_device_benign_recall": 0.9881074168797954,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "lie",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.7122638818641733,
+     "macro_f1_merged": 0.9172349761977626,
+     "attack_recall": 0.9999015696929839,
+     "benign_recall": 0.9975902692778458,
+     "worst_device_benign_recall": 0.991304347826087,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6453842932058382,
+     "macro_f1_merged": 0.8466426712197541,
+     "attack_recall": 0.999954561606888,
+     "benign_recall": 0.9961469534050179,
+     "worst_device_benign_recall": 0.9851662404092072,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6525592386829417,
+     "macro_f1_merged": 0.8279966444148821,
+     "attack_recall": 0.9998493374813985,
+     "benign_recall": 0.9974809062319492,
+     "worst_device_benign_recall": 0.9878516624040921,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.670069137917651,
+   "macro_f1_merged": 0.8639580972774663,
+   "attack_recall": 0.9999018229270901,
+   "benign_recall": 0.997072709638271,
+   "worst_device_benign_recall": 0.9881074168797954,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "minmax",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6803040083407416,
+     "macro_f1_merged": 0.8926230471181016,
+     "attack_recall": 0.9996949742134229,
+     "benign_recall": 0.998890758873929,
+     "worst_device_benign_recall": 0.9973145780051151,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.9,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6400036447996054,
+     "macro_f1_merged": 0.8401376046254824,
+     "attack_recall": 0.9999277646058219,
+     "benign_recall": 0.9979032258064516,
+     "worst_device_benign_recall": 0.9938618925831202,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.95,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6345174085156683,
+     "macro_f1_merged": 0.8332365872049153,
+     "attack_recall": 0.9998929503157304,
+     "benign_recall": 0.9953629420447981,
+     "worst_device_benign_recall": 0.9860470108403993,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.95,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6516083538853383,
+   "macro_f1_merged": 0.855332412982833,
+   "attack_recall": 0.9998385630449919,
+   "benign_recall": 0.9973856422417263,
+   "worst_device_benign_recall": 0.9924078271428782,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9333333333333332
+  },
+  {
+   "attack": "minmax",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6803040083407416,
+     "macro_f1_merged": 0.8926230471181016,
+     "attack_recall": 0.9996949742134229,
+     "benign_recall": 0.998890758873929,
+     "worst_device_benign_recall": 0.9973145780051151,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.9,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6400036447996054,
+     "macro_f1_merged": 0.8401376046254824,
+     "attack_recall": 0.9999277646058219,
+     "benign_recall": 0.9979032258064516,
+     "worst_device_benign_recall": 0.9938618925831202,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.95,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6345174085156683,
+     "macro_f1_merged": 0.8332365872049153,
+     "attack_recall": 0.9998929503157304,
+     "benign_recall": 0.9953629420447981,
+     "worst_device_benign_recall": 0.9860470108403993,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.95,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6516083538853383,
+   "macro_f1_merged": 0.855332412982833,
+   "attack_recall": 0.9998385630449919,
+   "benign_recall": 0.9973856422417263,
+   "worst_device_benign_recall": 0.9924078271428782,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.9333333333333332
+  },
+  {
+   "attack": "fang_trim",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6662803546578767,
+     "macro_f1_merged": 0.8695015851785857,
+     "attack_recall": 0.9999048146481603,
+     "benign_recall": 0.9746022031823746,
+     "worst_device_benign_recall": 0.9380701942685413,
+     "false_reject_rate": 0.008333333333333333,
+     "attacker_reject_rate": 0.15,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6481781962091746,
+     "macro_f1_merged": 0.8539107953721957,
+     "attack_recall": 0.9999464059978679,
+     "benign_recall": 0.990752688172043,
+     "worst_device_benign_recall": 0.9815391220349898,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.15,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.640643247457553,
+     "macro_f1_merged": 0.8410619287184093,
+     "attack_recall": 0.9998625534918021,
+     "benign_recall": 0.9928759386432193,
+     "worst_device_benign_recall": 0.9851883653536546,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6517005994415347,
+   "macro_f1_merged": 0.8548247697563968,
+   "attack_recall": 0.9999045913792767,
+   "benign_recall": 0.9860769433325456,
+   "worst_device_benign_recall": 0.9682658938857287,
+   "false_reject_rate": 0.002777777777777778,
+   "attacker_reject_rate": 0.09999999999999999
+  },
+  {
+   "attack": "fang_trim",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6582027546206942,
+     "macro_f1_merged": 0.8588280530761145,
+     "attack_recall": 0.9998810183102004,
+     "benign_recall": 0.9990692574459404,
+     "worst_device_benign_recall": 0.9982078853046595,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.4,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6321480471821143,
+     "macro_f1_merged": 0.830493386948148,
+     "attack_recall": 0.9999277646058219,
+     "benign_recall": 0.9975985663082437,
+     "worst_device_benign_recall": 0.9942041429644736,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.5,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.643574110515716,
+     "macro_f1_merged": 0.844544985137143,
+     "attack_recall": 0.9998757695022058,
+     "benign_recall": 0.9991014697387844,
+     "worst_device_benign_recall": 0.9984750285932139,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.3333333333333333,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6446416374395082,
+   "macro_f1_merged": 0.8446221417204685,
+   "attack_recall": 0.999894850806076,
+   "benign_recall": 0.9985897644976562,
+   "worst_device_benign_recall": 0.996962352287449,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.41111111111111115
+  },
+  {
+   "attack": "adaptive_gate",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6374799987571107,
+     "macro_f1_merged": 0.8403341533563169,
+     "attack_recall": 0.9980249039493267,
+     "benign_recall": 0.8561429008567931,
+     "worst_device_benign_recall": 0.683291770573566,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.658661071675599,
+     "macro_f1_merged": 0.8629582541853239,
+     "attack_recall": 0.9960922981923676,
+     "benign_recall": 0.8944623655913978,
+     "worst_device_benign_recall": 0.6770873046130385,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.5710660112637812,
+     "macro_f1_merged": 0.7557450744625711,
+     "attack_recall": 0.8954772169196652,
+     "benign_recall": 0.9978178550799051,
+     "worst_device_benign_recall": 0.9873349790705163,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.622402360565497,
+   "macro_f1_merged": 0.8196791606680707,
+   "attack_recall": 0.9631981396871199,
+   "benign_recall": 0.9161410405093653,
+   "worst_device_benign_recall": 0.7825713514190403,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "adaptive_gate",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6764590036506998,
+     "macro_f1_merged": 0.8879421298199793,
+     "attack_recall": 0.992828649060261,
+     "benign_recall": 0.9986612607099143,
+     "worst_device_benign_recall": 0.9960358056265984,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.16666666666666666,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6558841770403668,
+     "macro_f1_merged": 0.8596328220002903,
+     "attack_recall": 0.999735525250348,
+     "benign_recall": 0.980268817204301,
+     "worst_device_benign_recall": 0.974901456037326,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.16666666666666666,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6331929343919772,
+     "macro_f1_merged": 0.835924411876453,
+     "attack_recall": 0.9985620980680836,
+     "benign_recall": 0.9993742378537963,
+     "worst_device_benign_recall": 0.9988562714449104,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.11666666666666667,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6551787050276813,
+   "macro_f1_merged": 0.8611664545655743,
+   "attack_recall": 0.9970420907928975,
+   "benign_recall": 0.9927681052560039,
+   "worst_device_benign_recall": 0.989931177702945,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.15
+  },
+  {
+   "attack": "scaler_poison",
+   "defence": "proposed",
+   "runs": [
+    {
+     "macro_f1": 0.6864079313845219,
+     "macro_f1_merged": 0.8998401706111979,
+     "attack_recall": 0.9998723650963968,
+     "benign_recall": 0.9985592615259078,
+     "worst_device_benign_recall": 0.9960358056265984,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6510578983452588,
+     "macro_f1_merged": 0.8573633952696531,
+     "attack_recall": 0.9992438585351361,
+     "benign_recall": 0.9982795698924731,
+     "worst_device_benign_recall": 0.9956521739130435,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.633125692788409,
+     "macro_f1_merged": 0.8315799765656515,
+     "attack_recall": 0.9984682643942178,
+     "benign_recall": 0.997721583980489,
+     "worst_device_benign_recall": 0.9929667519181585,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6568638408393966,
+   "macro_f1_merged": 0.8629278474821676,
+   "attack_recall": 0.9991948293419167,
+   "benign_recall": 0.9981868051329567,
+   "worst_device_benign_recall": 0.9948849104859335,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  },
+  {
+   "attack": "scaler_poison",
+   "defence": "fog",
+   "runs": [
+    {
+     "macro_f1": 0.6864079313845219,
+     "macro_f1_merged": 0.8998401706111979,
+     "attack_recall": 0.9998723650963968,
+     "benign_recall": 0.9985592615259078,
+     "worst_device_benign_recall": 0.9960358056265984,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      2,
+      6,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.6510578983452588,
+     "macro_f1_merged": 0.8573633952696531,
+     "attack_recall": 0.9992438585351361,
+     "benign_recall": 0.9982795698924731,
+     "worst_device_benign_recall": 0.9956521739130435,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      7
+     ]
+    },
+    {
+     "macro_f1": 0.633125692788409,
+     "macro_f1_merged": 0.8315799765656515,
+     "attack_recall": 0.9984682643942178,
+     "benign_recall": 0.997721583980489,
+     "worst_device_benign_recall": 0.9929667519181585,
+     "false_reject_rate": 0.0,
+     "attacker_reject_rate": 0.0,
+     "most_attackers_in_one_fog": 1,
+     "attackers": [
+      1,
+      4,
+      9
+     ]
+    }
+   ],
+   "macro_f1": 0.6568638408393966,
+   "macro_f1_merged": 0.8629278474821676,
+   "attack_recall": 0.9991948293419167,
+   "benign_recall": 0.9981868051329567,
+   "worst_device_benign_recall": 0.9948849104859335,
+   "false_reject_rate": 0.0,
+   "attacker_reject_rate": 0.0
+  }
+ ]
+}
