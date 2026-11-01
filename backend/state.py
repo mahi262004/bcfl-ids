@@ -106,6 +106,8 @@ class Run:
     ledger: object | None = None
     backend: str | None = None
     tampered: bool = False
+    sizes: dict | None = None
+    scale: Scale | None = None
     started: float | None = None
     elapsed: float | None = None
 
@@ -124,15 +126,15 @@ class Manager:
     def busy(self) -> bool:
         return self.active_job is not None and self.active_job["status"] == "running"
 
-    def start(self, attack: str, n_attackers: int, defence: str, rounds: int, seed: int, compare: bool) -> dict:
+    def start(self, attack: str, n_attackers: int, defence: str, rounds: int, seed: int, compare: bool, dishonest_server: bool = False) -> dict:
         with self.lock:
             if self.busy():
                 raise RuntimeError("A simulation is already running")
-            defences = ["fedavg", "proposed"] if compare else [defence]
+            defences = ["fedavg", "proposed" if defence == "fedavg" else defence] if compare else [defence]
             runs = []
             for name in defences:
                 run_id = uuid.uuid4().hex[:10]
-                cfg = SimConfig(attack=attack, n_attackers=n_attackers, defence=name, rounds=rounds, seed=seed, batch_size=128)
+                cfg = SimConfig(attack=attack, n_attackers=n_attackers, defence=name, rounds=rounds, seed=seed, batch_size=128, dishonest_server=dishonest_server and name != "fedavg")
                 run = Run(run_id, cfg.to_dict(), DEFENCE_LABELS[name])
                 self.runs[run_id] = run
                 self.order.append(run_id)
